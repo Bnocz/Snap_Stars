@@ -8,19 +8,14 @@ public class Exhibit {
     private String sitename;
     private String status;
     private String descriptionofwork;
-    private String yearofinstallation;
     private ExhibitPhoto exhibitPhoto;
     private String url;
     private Integer registryid;
     private ExhibitGeom exhibitGeom;
-    private String neighbourhood;
-    private String ownership;
     private String artists;
     private String siteaddress;
-    private String artistprojectstatement;
     private String geoLocalArea;
     private String type;
-    private String primarymaterial;
     private String locationonsite;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

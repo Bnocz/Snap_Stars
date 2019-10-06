@@ -1,8 +1,6 @@
 package com.example.scrapp;
 
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,12 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.scrapp.Exhibit;
-import com.example.scrapp.ExhibitPhoto;
-import com.example.scrapp.ExhibitGeom;
 
 
 public class DownloadTask extends AsyncTask<String, Void, JSONArray> {
@@ -44,10 +36,9 @@ public class DownloadTask extends AsyncTask<String, Void, JSONArray> {
 
             JSONObject jsonObject = new JSONObject(JSON);
             JSONArray jsonArray = jsonObject.getJSONArray("records");
-            System.out.println("Checkk 1: " + jsonArray.toString());
             return jsonArray;
         } catch (Exception e) {
-            System.out.println("Checkk 2 e: " + e);
+            Log.e("Check", "Exception getting JSON from api url" + e);
         }
         return null;
     }

@@ -32,15 +32,15 @@ public class BootUp extends AppCompatActivity {
         try {
             exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10Results).get());
         } catch (Exception e) {
-            System.out.println("Checkk 14 e: " + e);
+            Log.e("Check", e.toString());
         }
 
-        System.out.println("Checkk 15: " + exhibits);
-        System.out.println("Checkk 16: " + exhibitsCreated);
+        System.out.println("Check: exhibits list: " + exhibits);
+        System.out.println("Check: # of exhibits processed: " + exhibits.size());
+        System.out.println("Check: exhibits created flag: " + exhibitsCreated);
     }
 
     public ArrayList<Exhibit> createExhibitsFromJSON(JSONArray jsonArray) {
-        System.out.println("Checkk 3");
 
         ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
 
@@ -58,7 +58,6 @@ public class BootUp extends AppCompatActivity {
                 //Create an ExhibitPhoto Object from JSON
                 try{
                     JSONObject jsonObjctPhotoURL = jsonObjectFields.getJSONObject("photourl");
-                    System.out.println("Checkk 5");
 
                     newExhibitPhoto = new ExhibitPhoto(
                             (String) jsonObjctPhotoURL.get("mimetype"),
@@ -70,10 +69,8 @@ public class BootUp extends AppCompatActivity {
                             (Boolean) jsonObjctPhotoURL.get("thumbnail")
                     );
 
-                    System.out.println("Checkk 7: " + newExhibitPhoto.toString());
-
                 } catch (Exception e) {
-                    Log.e("Checkk e", "ExhibitPhoto Creation Error " + e);
+                    Log.e("Check", "ExhibitPhoto Creation Error " + e);
                 }
 
                 //Create an ExhibitGeom Object from JSON
@@ -81,8 +78,6 @@ public class BootUp extends AppCompatActivity {
                     JSONObject jsonObjectGeom = jsonObjectFields.getJSONObject("geom");
                     JSONArray jsonArrayCoordinates = jsonObjectGeom.getJSONArray("coordinates");
                     List<Double> coordinates = new ArrayList<Double>();
-
-                    System.out.println("Chekk 11: " + coordinates);
 
                     if (jsonArrayCoordinates != null) {
                         coordinates.add(jsonArrayCoordinates.getDouble(0));
@@ -94,7 +89,7 @@ public class BootUp extends AppCompatActivity {
                             (List<Double>) coordinates
                     );
                 } catch (Exception e) {
-                    System.out.println("Checkk e -- ExhibitGeom Creation Error " + e);
+                    Log.e("Check", "ExhibitGeom Creation Error " + e);
                 }
 
                 //Create an Exhibit Object from JSON
@@ -115,7 +110,7 @@ public class BootUp extends AppCompatActivity {
 
                     );
                 } catch (Exception e) {
-                    System.out.println("Checkk e -- Exhibit Creation Error " + e);
+                    Log.e("Check", "Exhibit Creation Error " + e);
                 }
 
                 if (newExhibit != null) {
@@ -123,11 +118,8 @@ public class BootUp extends AppCompatActivity {
                 }
 
             } catch (Exception e){
-                System.out.println("Checkk 4: " + e);
+                Log.e("Check", e.toString());
             }
-
-            System.out.println("Checkk 8: " + exhibits.size());
-
         }
         BootUp.exhibitsCreated = true;
         return exhibits;
