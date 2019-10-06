@@ -2,12 +2,16 @@ package com.example.scrapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -16,17 +20,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        DownloadTask downloadTask = new DownloadTask();
-
-        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
-        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=600&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
 
 
-        try {
-            JSONArray exhibitJSON = downloadTask.execute(apiURL10Results).get();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+
 
 
     }
@@ -44,4 +40,5 @@ public class LoginActivity extends AppCompatActivity {
         Intent createAccIntent = new Intent(this, CreateAccActivity.class);
         startActivity(createAccIntent);
     }
+
 }
