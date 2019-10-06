@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ScrAPP</string>
+    <string name="app_name">ScrApp</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="btnLogin">Login</string>
     <string name="btnCreateAcc">Create Account</string>

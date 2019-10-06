@@ -17,10 +17,12 @@ public class LoginActivity extends AppCompatActivity {
 
         DownloadTask downloadTask = new DownloadTask();
 
+        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=600&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+
+
         try {
-            JSONArray exhibitJSON = downloadTask.execute("https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place").get();
-
-
+            JSONArray exhibitJSON = downloadTask.execute(apiURL10Results).get();
         } catch (Exception e) {
             System.out.println(e);
         }
