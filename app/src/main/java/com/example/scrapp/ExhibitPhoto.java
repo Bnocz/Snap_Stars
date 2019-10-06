@@ -3,6 +3,8 @@ package com.example.scrapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.lang.StringBuilder;
+
 public class ExhibitPhoto {
 
     private String mimetype;
@@ -16,13 +18,11 @@ public class ExhibitPhoto {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public ExhibitPhoto() {
     }
 
     /**
-     *
      * @param id
      * @param mimetype
      * @param thumbnail
@@ -106,9 +106,11 @@ public class ExhibitPhoto {
         this.additionalProperties.put(name, value);
     }
 
-//    @Override
-//    public String toString() {
-//        return new ToStringBuilder(this).append("mimetype", mimetype).append("format", format).append("filename", filename).append("width", width).append("id", id).append("height", height).append("thumbnail", thumbnail).append("additionalProperties", additionalProperties).toString();
-//    }
+    @Override
+    public String toString() {
+        return new StringBuilder().append("mimetype: " + mimetype).append(" format: " + format).append(" filename: " + filename)
+                .append(" width: " + width).append(" id: " + id).append(" height: " + height).append(" thumbnail: " + thumbnail)
+                .append(" additionalProperties: " + additionalProperties).toString();
+    }
 
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.lang.StringBuilder;
 public class Exhibit {
 
+    private String sitename;
     private String status;
     private String descriptionofwork;
     private String yearofinstallation;
@@ -32,37 +33,45 @@ public class Exhibit {
 
     /**
      *
-     * @param descriptionofwork
+     * @param sitename
      * @param status
-     * @param yearofinstallation
+     * @param descriptionofwork
      * @param exhibitPhoto
+     * @param url
      * @param registryid
      * @param exhibitGeom
-     * @param primarymaterial
-     * @param type
-     * @param geoLocalArea
-     * @param siteaddress
-     * @param url
      * @param artists
-     * @param ownership
+     * @param siteaddress
+     * @param geo_local_area
+     * @param type
      * @param locationonsite
-     * @param artistprojectstatement
-     * @param neighbourhood
      */
-    public Exhibit(String status, String descriptionofwork, String yearofinstallation, ExhibitPhoto exhibitPhoto, String url, Integer registryid, ExhibitGeom exhibitGeom, String neighbourhood, String ownership, String artists, String siteaddress, String artistprojectstatement, String geoLocalArea, String type, String primarymaterial, String locationonsite) {
+    public Exhibit(String sitename, String status, String descriptionofwork,
+                   ExhibitPhoto exhibitPhoto,
+                   String url, Integer registryid,
+                   ExhibitGeom exhibitGeom, String artists, String siteaddress, String geo_local_area,
+                   String type, String locationonsite) {
         super();
+        this.sitename = sitename;
         this.status = status;
         this.descriptionofwork = descriptionofwork;
-        this.yearofinstallation = yearofinstallation;
         this.exhibitPhoto = exhibitPhoto;
         this.url = url;
         this.registryid = registryid;
         this.exhibitGeom = exhibitGeom;
         this.artists = artists;
         this.siteaddress = siteaddress;
-        this.geoLocalArea = geoLocalArea;
+        this.geoLocalArea = geo_local_area;
         this.type = type;
         this.locationonsite = locationonsite;
+    }
+
+    public String getSitename() {
+        return sitename;
+    }
+
+    public void setSitename(String status) {
+        this.sitename = status;
     }
 
     public String getStatus() {
@@ -79,14 +88,6 @@ public class Exhibit {
 
     public void setDescriptionofwork(String descriptionofwork) {
         this.descriptionofwork = descriptionofwork;
-    }
-
-    public String getYearofinstallation() {
-        return yearofinstallation;
-    }
-
-    public void setYearofinstallation(String yearofinstallation) {
-        this.yearofinstallation = yearofinstallation;
     }
 
     public ExhibitPhoto getExhibitPhoto() {
@@ -171,7 +172,12 @@ public class Exhibit {
 
     @Override
     public String toString() {
-        return new StringBuilder().append("status: " + status).append("descriptionofwork: " + descriptionofwork).append("yearofinstallation: " + yearofinstallation).append("exhibitPhoto: " + exhibitPhoto).append("url: " + url).append("registryid: " + registryid).append("exhibitGeom: " + exhibitGeom).append("neighbourhood: " + neighbourhood).append("ownership: " + ownership).append("artists: " + artists).append("siteaddress: " + siteaddress).append("artistprojectstatement: " + artistprojectstatement).append("geoLocalArea: " + geoLocalArea).append("type: " + type).append("primarymaterial: " + primarymaterial).append("locationonsite: " + locationonsite).append("additionalProperties: " + additionalProperties).toString();
+        return new StringBuilder().append("sitename: " + sitename).append(" status: " + status).append(
+                "descriptionofwork: " + descriptionofwork)
+                .append("exhibitPhoto: " + exhibitPhoto).append("url: " + url).append("registryid: " + registryid)
+                .append("exhibitGeom: " + exhibitGeom).append("artists: " + artists).append("siteaddress: " + siteaddress)
+                .append("geoLocalArea: " + geoLocalArea).append("type: " + type).append("locationonsite: " + locationonsite)
+                .append("additionalProperties: " + additionalProperties).toString();
     }
 
 }

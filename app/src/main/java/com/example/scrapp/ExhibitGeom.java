@@ -3,6 +3,7 @@ package com.example.scrapp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.StringBuilder;
 
 
 public class ExhibitGeom {
@@ -53,9 +54,10 @@ public class ExhibitGeom {
         this.additionalProperties.put(name, value);
     }
 
-    //@Override
-//    public String toString() {
-//        return new ToStringBuilder(this).append("type", type).append("coordinates", coordinates).append("additionalProperties", additionalProperties).toString();
-//    }
+    @Override
+    public String toString() {
+        return new StringBuilder().append("type: " + type).append(" coordinates: " + coordinates).append(
+                " additionalProperties: " + additionalProperties).toString();
+    }
 
 }
