@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "875534811095",
+    "firebase_url": "https://snap-stars-database.firebaseio.com",
+    "project_id": "snap-stars-database",
+    "storage_bucket": "snap-stars-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875534811095:android:5ca2c7468193fc22b79592",
+        "android_client_info": {
+          "package_name": "com.example.scrapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875534811095-pegdpqk8fsbv7m6anj0hc7i4ig359mbi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scrapp",
+            "certificate_hash": "6c9c668d9643579f8caa9d678bb5a3b0df04ee18"
+          }
+        },
+        {
+          "client_id": "875534811095-k5hi75d4bsvlrn5po8ejeiinqac22gnm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkZnbLsCN-Sf5eLpUUlht3Nlkol2dTAsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875534811095-k5hi75d4bsvlrn5po8ejeiinqac22gnm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
