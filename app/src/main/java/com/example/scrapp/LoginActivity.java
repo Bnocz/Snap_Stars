@@ -193,6 +193,9 @@ public class LoginActivity extends BaseActivity implements
             signOut();
         } else if (i == R.id.disconnectButton) {
             revokeAccess();
+        } else if(i == R.id.goToMap){
+            Intent listIntent = new Intent(this, LocationMapActivity.class);
+            startActivity(listIntent);
         }
     }
 }
