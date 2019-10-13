@@ -13,34 +13,31 @@ public class ExhibitPhoto {
     private Integer width;
     private String id;
     private Integer height;
-    private Boolean thumbnail;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    /**
-     * No args constructor for use in serialization
-     */
-    public ExhibitPhoto() {
+
+    public ExhibitPhoto(HashMap photoAttributes) {
+        super();
+        this.mimetype = photoAttributes.get("id").toString();
+        this.format = photoAttributes.get("format").toString();
+        this.filename = photoAttributes.get("filename").toString();
+        this.width = (int) photoAttributes.get("width");
+        this.id = photoAttributes.get("id").toString();
+        this.height = (int) photoAttributes.get("height");
     }
 
-    /**
-     * @param id
-     * @param mimetype
-     * @param thumbnail
-     * @param height
-     * @param width
-     * @param filename
-     * @param format
-     */
-    public ExhibitPhoto(String mimetype, String format, String filename, Integer width, String id, Integer height, Boolean thumbnail) {
-        super();
-        this.mimetype = mimetype;
-        this.format = format;
-        this.filename = filename;
-        this.width = width;
-        this.id = id;
-        this.height = height;
-        this.thumbnail = thumbnail;
+    public static HashMap getExhibitPhotoBaseAttributes() {
+        HashMap<String, Object> photoAttributes = new HashMap<String, Object>() {{
+            put("mimetype", "");
+            put("format", "");
+            put("filename", "");
+            put("width", 0);
+            put("id", "");
+            put("height", 0);
+        }};
+        return photoAttributes;
     }
+
 
     public String getMimetype() {
         return mimetype;
@@ -90,14 +87,6 @@ public class ExhibitPhoto {
         this.height = height;
     }
 
-    public Boolean getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(Boolean thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
@@ -109,7 +98,7 @@ public class ExhibitPhoto {
     @Override
     public String toString() {
         return new StringBuilder().append("mimetype: " + mimetype).append(" format: " + format).append(" filename: " + filename)
-                .append(" width: " + width).append(" id: " + id).append(" height: " + height).append(" thumbnail: " + thumbnail)
+                .append(" width: " + width).append(" id: " + id).append(" height: " + height)
                 .append(" additionalProperties: " + additionalProperties).toString();
     }
 

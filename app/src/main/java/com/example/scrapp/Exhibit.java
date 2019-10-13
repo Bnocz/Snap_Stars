@@ -19,70 +19,53 @@ public class Exhibit {
     private String locationonsite;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public Exhibit() {
+
+    public Exhibit(HashMap exhibitAttributes) {
+        super();
+        this.sitename = exhibitAttributes.get("sitename").toString();
+        this.status = exhibitAttributes.get("status").toString();
+        this.descriptionofwork = exhibitAttributes.get("descriptionofwork").toString();
+        this.exhibitPhoto = (ExhibitPhoto) exhibitAttributes.get("exhibitPhoto");
+        this.url = exhibitAttributes.get("url").toString();
+        this.registryid = (int) exhibitAttributes.get("registryid");
+        this.exhibitGeom = (ExhibitGeom) exhibitAttributes.get("exhibitGeom");
+        this.artists = exhibitAttributes.get("artists").toString();
+        this.siteaddress = exhibitAttributes.get("siteaddress").toString();
+        this.geoLocalArea = exhibitAttributes.get("geo_local_area").toString();
+        this.type = exhibitAttributes.get("type").toString();
+        this.locationonsite = exhibitAttributes.get("locationonsite").toString();
     }
 
-    /**
-     *
-     * @param sitename
-     * @param status
-     * @param descriptionofwork
-     * @param exhibitPhoto
-     * @param url
-     * @param registryid
-     * @param exhibitGeom
-     * @param artists
-     * @param siteaddress
-     * @param geo_local_area
-     * @param type
-     * @param locationonsite
-     */
-    public Exhibit(String sitename, String status, String descriptionofwork,
-                   ExhibitPhoto exhibitPhoto,
-                   String url, Integer registryid,
-                   ExhibitGeom exhibitGeom, String artists, String siteaddress, String geo_local_area,
-                   String type, String locationonsite) {
-        super();
-        this.sitename = sitename;
-        this.status = status;
-        this.descriptionofwork = descriptionofwork;
-        this.exhibitPhoto = exhibitPhoto;
-        this.url = url;
-        this.registryid = registryid;
-        this.exhibitGeom = exhibitGeom;
-        this.artists = artists;
-        this.siteaddress = siteaddress;
-        this.geoLocalArea = geo_local_area;
-        this.type = type;
-        this.locationonsite = locationonsite;
+    public static HashMap getExhibitBaseAttributes() {
+        HashMap<String, Object> photoAttributes = new HashMap<String, Object>() {{
+            put("sitename", "");
+            put("status", "In place");
+            put("descriptionofwork", "");
+            put("exhibitPhoto", null);
+            put("url", "");
+            put("registryid", -1);
+            put("exhibitGeom", null);
+            put("artists", "");
+            put("siteaddress", "");
+            put("geo_local_area", "");
+            put("type", "");
+            put("locationonsite", "");
+        }};
+        return photoAttributes;
     }
+
 
     public String getSitename() {
         return sitename;
-    }
-
-    public void setSitename(String status) {
-        this.sitename = status;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getDescriptionofwork() {
         return descriptionofwork;
-    }
-
-    public void setDescriptionofwork(String descriptionofwork) {
-        this.descriptionofwork = descriptionofwork;
     }
 
     public ExhibitPhoto getExhibitPhoto() {
@@ -97,64 +80,32 @@ public class Exhibit {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public Integer getRegistryid() {
         return registryid;
-    }
-
-    public void setRegistryid(Integer registryid) {
-        this.registryid = registryid;
     }
 
     public ExhibitGeom getExhibitGeom() {
         return exhibitGeom;
     }
 
-    public void setExhibitGeom(ExhibitGeom exhibitGeom) {
-        this.exhibitGeom = exhibitGeom;
-    }
-
     public String getArtists() {
         return artists;
-    }
-
-    public void setArtists(String artists) {
-        this.artists = artists;
     }
 
     public String getSiteaddress() {
         return siteaddress;
     }
 
-    public void setSiteaddress(String siteaddress) {
-        this.siteaddress = siteaddress;
-    }
-
     public String getGeoLocalArea() {
         return geoLocalArea;
-    }
-
-    public void setGeoLocalArea(String geoLocalArea) {
-        this.geoLocalArea = geoLocalArea;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getLocationonsite() {
         return locationonsite;
-    }
-
-    public void setLocationonsite(String locationonsite) {
-        this.locationonsite = locationonsite;
     }
 
     public Map<String, Object> getAdditionalProperties() {

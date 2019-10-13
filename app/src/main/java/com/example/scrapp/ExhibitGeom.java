@@ -13,13 +13,6 @@ public class ExhibitGeom {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     * No args constructor for use in serialization
-     *
-     */
-    public ExhibitGeom() {
-    }
-
-    /**
      *
      * @param type
      * @param coordinates
@@ -34,16 +27,8 @@ public class ExhibitGeom {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public List<Double> getCoordinates() {
         return coordinates;
-    }
-
-    public void setCoordinates(List<Double> coordinates) {
-        this.coordinates = coordinates;
     }
 
     public Map<String, Object> getAdditionalProperties() {

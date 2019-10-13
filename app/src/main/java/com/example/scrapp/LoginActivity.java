@@ -186,6 +186,8 @@ public class LoginActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
+
+        Log.e("Check 1", v.toString());
         int i = v.getId();
         if (i == R.id.signInButton) {
             signIn();
