@@ -4,12 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,21 +21,18 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import java.lang.Object;
-import java.util.Locale;
 
-
-public class BootUp extends AppCompatActivity {
+public class DataMain extends AppCompatActivity {
 
     private Context context = this;
 
     // User Location Variables
-    LatLng userCoor;
+    static LatLng userCoor;
     LocationManager locationManager;
     LocationListener locationListener;
     private boolean userLocationFound = false;
@@ -50,14 +46,32 @@ public class BootUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setupLocationServices();
-        findExhibitsByApi();
+
+        // Waits for location services to find user before finding nearby exhibits.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                findExhibitsByApi();
+            }
+        }, 5000);
+
+
+        // Uncomment this to see what Exhibits we're getting. Sometimes returns null, because async
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//                public void run() {
+//            for (Exhibit exhibit : exhibits) {
+//                System.out.println("Loaded Exhibits: " + exhibit.toString());
+//            }
+//            }
+//        }, 10000);
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
 
     }
 
-
+    // Constantly updates user's location
     public void setupLocationServices() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -67,15 +81,14 @@ public class BootUp extends AppCompatActivity {
             public void onLocationChanged(Location location) {
 
                     try {
-                        LatLng userCoor = new LatLng(location.getLatitude(),
+                        userCoor = new LatLng(location.getLatitude(),
                                 location.getLongitude());
-
-                        //System.out.println("check 5" + userCoor.toString());
+                        userLocationFound = true;
 
                     } catch (Exception e) {
-                        Log.e("User Coor Error", "User coordinates not found.");
+                        Log.e("User Coordinate Error", "User coordinates not found.");
                     }
-                    userLocationFound = true;
+
             }
 
             @Override
@@ -89,6 +102,7 @@ public class BootUp extends AppCompatActivity {
             public void onProviderDisabled(String provider) {}
         };
 
+        // Asks user for location permissions
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -101,6 +115,7 @@ public class BootUp extends AppCompatActivity {
         }
     }
 
+    // More location permissions stuff
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -116,6 +131,38 @@ public class BootUp extends AppCompatActivity {
         }
     }
 
+    // Pulls exhibit data from the API
+    public void findExhibitsByApi() {
+        DownloadTask downloadTask = new DownloadTask();
+
+        DecimalFormat df = new DecimalFormat("##0.000000");
+
+        String apiURL10ResultsNearby;
+
+        while (true) {
+            if (userLocationFound) {
+                apiURL10ResultsNearby = "https://opendata.vancouver.ca/api/records/1" +
+                        ".0/search/?dataset=public-art&rows" +
+                        "=10" +
+                        "&refine.status=In+place&geofilter.distance=" + df.format(this.getUserLatitude()) +
+                        "%2C+" + df.format(this.getUserLongtitude()) + "%2C+" + "2000";
+                break;
+            }
+        }
+
+
+        try {
+            exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10ResultsNearby).get());
+            System.out.println("Check: exhibits list: " + exhibits);
+            System.out.println("Check: # of exhibits processed: " + exhibits.size());
+            System.out.println("Check: exhibits created flag: " + exhibitsCreated);
+        } catch (Exception e) {
+            Log.e("Exhibits/JSON Error ", e.toString());
+        }
+
+    }
+
+    // Takes a JSON array and turns it into multiple Exhibit objects
     public ArrayList<Exhibit> createExhibitsFromJSON(JSONArray jsonArray) {
 
         ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
@@ -223,32 +270,20 @@ public class BootUp extends AppCompatActivity {
                 Log.e("Total Creation Error ", e.toString());
             }
         }
-        BootUp.exhibitsCreated = true;
+        DataMain.exhibitsCreated = true;
         return exhibits;
     }
 
-    public void findExhibitsByApi() {
-        DownloadTask downloadTask = new DownloadTask();
+    public double getUserLatitude(){
+        return userCoor.latitude;
+    }
 
-        String apiURL10ResultsWithFacets= "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
-        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place";
-        String apiURL100Results = "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=100&refine.status=In+place";
-        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=600&refine.status=In+place";
+    public double getUserLongtitude(){
+        return userCoor.longitude;
+    }
 
-
-        try {
-            exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10Results).get());
-        } catch (Exception e) {
-            Log.e("Check", e.toString());
-        }
-
-
-        System.out.println("Check: exhibits list: " + exhibits);
-        System.out.println("Check: # of exhibits processed: " + exhibits.size());
-        System.out.println("Check: exhibits created flag: " + exhibitsCreated);
+    public ArrayList<Exhibit> getNearbyExhibits(){
+        return exhibits;
     }
 
 }
