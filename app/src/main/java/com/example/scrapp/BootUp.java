@@ -26,13 +26,18 @@ public class BootUp extends AppCompatActivity {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
 
+
+
+
         DownloadTask downloadTask = new DownloadTask();
 
-        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+        String apiURL10ResultsWithFacets= "https://opendata.vancouver.ca/api/records/1" +
+                ".0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place";
         String apiURL100Results = "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=100&facet=status&facet=sitename&facet" +
-                "=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
-        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=600&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+                ".0/search/?dataset=public-art&rows=100&refine.status=In+place";
+        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1" +
+                ".0/search/?dataset=public-art&rows=600&refine.status=In+place";
 
 
         try {
@@ -134,7 +139,7 @@ public class BootUp extends AppCompatActivity {
                 try{exhibitAttributes.put("locationonsite", jsonObjectFields.get("locationonsite"));}catch (Exception e){};
 
 //                System.out.println("" + i);
-//                System.out.println(exhibitAttributes.toString());
+                System.out.println(exhibitAttributes.toString());
 
 
                 try{
