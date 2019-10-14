@@ -1,54 +1,119 @@
 package com.example.scrapp;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import java.lang.Object;
+import java.util.Locale;
+
 
 public class BootUp extends AppCompatActivity {
 
+    private Context context = this;
+
+    // User Location Variables
+    LatLng userCoor;
+    LocationManager locationManager;
+    LocationListener locationListener;
+    private boolean userLocationFound = false;
+
+
+    // Exhibit Data Variables
     static ArrayList<Exhibit> exhibits;
     static boolean exhibitsCreated = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setupLocationServices();
+        findExhibitsByApi();
+
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
 
+    }
 
 
+    public void setupLocationServices() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        DownloadTask downloadTask = new DownloadTask();
+        locationListener = new LocationListener() {
 
-        String apiURL10ResultsWithFacets= "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
-        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place";
-        String apiURL100Results = "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=100&refine.status=In+place";
-        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1" +
-                ".0/search/?dataset=public-art&rows=600&refine.status=In+place";
+            @Override
+            public void onLocationChanged(Location location) {
 
+                    try {
+                        LatLng userCoor = new LatLng(location.getLatitude(),
+                                location.getLongitude());
 
-        try {
-            exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10Results).get());
-        } catch (Exception e) {
-            Log.e("Check", e.toString());
+                        //System.out.println("check 5" + userCoor.toString());
+
+                    } catch (Exception e) {
+                        Log.e("User Coor Error", "User coordinates not found.");
+                    }
+                    userLocationFound = true;
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
+    }
 
-        System.out.println("Check: exhibits list: " + exhibits);
-        System.out.println("Check: # of exhibits processed: " + exhibits.size());
-        System.out.println("Check: exhibits created flag: " + exhibitsCreated);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            }
+        }
     }
 
     public ArrayList<Exhibit> createExhibitsFromJSON(JSONArray jsonArray) {
@@ -161,4 +226,29 @@ public class BootUp extends AppCompatActivity {
         BootUp.exhibitsCreated = true;
         return exhibits;
     }
+
+    public void findExhibitsByApi() {
+        DownloadTask downloadTask = new DownloadTask();
+
+        String apiURL10ResultsWithFacets= "https://opendata.vancouver.ca/api/records/1" +
+                ".0/search/?dataset=public-art&rows=10&facet=status&facet=sitename&facet=siteaddress&facet=neighbourhood&facet=artists&facet=photocredits&facet=type&facet=RegistryID&facet=DescriptionofWork&facet=GEOM&facet=recordid&facet=registryid&refine.status=In+place";
+        String apiURL10Results = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place";
+        String apiURL100Results = "https://opendata.vancouver.ca/api/records/1" +
+                ".0/search/?dataset=public-art&rows=100&refine.status=In+place";
+        String apiURL600Results = "https://opendata.vancouver.ca/api/records/1" +
+                ".0/search/?dataset=public-art&rows=600&refine.status=In+place";
+
+
+        try {
+            exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10Results).get());
+        } catch (Exception e) {
+            Log.e("Check", e.toString());
+        }
+
+
+        System.out.println("Check: exhibits list: " + exhibits);
+        System.out.println("Check: # of exhibits processed: " + exhibits.size());
+        System.out.println("Check: exhibits created flag: " + exhibitsCreated);
+    }
+
 }
