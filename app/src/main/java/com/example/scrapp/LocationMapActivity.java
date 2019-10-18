@@ -79,9 +79,14 @@ public class LocationMapActivity extends FragmentActivity
         String msg = String.format("Current Location: %4.3f Lat %4.3f Long.",
                 location.getLatitude(),
                 location.getLongitude());
-
+        String ms1 = ("This is an exhibit");
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+        Location exhibit = new Location("");
+        LatLng exhibitLatLng = new LatLng(DataMain.exhibits.get(0).exhibitGeom.getLongtitude(),
+                DataMain.exhibits.get(0).exhibitGeom.getLatitude());
 
+
+        mMap.addMarker(new MarkerOptions().position(exhibitLatLng).title(ms1));
         mMap.addMarker(new MarkerOptions().position(latlng).title(msg));
 
         float zoomLevel = 17.0f;

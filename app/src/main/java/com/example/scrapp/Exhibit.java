@@ -11,7 +11,7 @@ public class Exhibit {
     private ExhibitPhoto exhibitPhoto;
     private String url;
     private Integer registryid;
-    private ExhibitGeom exhibitGeom;
+    public ExhibitGeom exhibitGeom;
     private String artists;
     private String siteaddress;
     private String geoLocalArea;

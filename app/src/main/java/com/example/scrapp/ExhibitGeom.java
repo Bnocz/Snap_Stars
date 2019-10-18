@@ -8,9 +8,9 @@ import java.lang.StringBuilder;
 
 public class ExhibitGeom {
 
-    private String type;
-    private List<Double> coordinates = null;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    public String type;
+    public List<Double> coordinates = null;
+    public Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
@@ -27,11 +27,11 @@ public class ExhibitGeom {
         return type;
     }
 
-    public double getLatitude(List<Double> coordinates){
+    public double getLatitude(){
         return coordinates.get(0);
     }
 
-    public double getLongtitude(List<Double> coordinates){
+    public double getLongtitude(){
         return coordinates.get(1);
     }
 
