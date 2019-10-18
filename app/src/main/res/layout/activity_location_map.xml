@@ -6,33 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".LocationMapActivity">
 
-    <Button
-        android:id="@+id/listBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="164dp"
-        android:layout_marginTop="203dp"
-        android:layout_marginEnd="159dp"
-        android:layout_marginBottom="480dp"
-        android:text="@string/btnList"
-        android:onClick="btnSendToList"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CurrentLocationActivity" />
 
-    <Button
-        android:id="@+id/detailBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="138dp"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="294dp"
-        android:text="@string/btnDetail"
-        android:onClick="btnSendToDetail"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
