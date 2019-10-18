@@ -81,13 +81,18 @@ public class LocationMapActivity extends FragmentActivity
                 location.getLongitude());
         String ms1 = ("This is an exhibit");
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-        Location exhibit = new Location("");
-        LatLng exhibitLatLng = new LatLng(DataMain.exhibits.get(0).exhibitGeom.getLongtitude(),
-                DataMain.exhibits.get(0).exhibitGeom.getLatitude());
 
-
-        mMap.addMarker(new MarkerOptions().position(exhibitLatLng).title(ms1));
         mMap.addMarker(new MarkerOptions().position(latlng).title(msg));
+
+        for (int i = 0; i < DataMain.exhibits.size(); i++) {
+            LatLng exhibitLatLng = new LatLng(DataMain.exhibits.get(i).exhibitGeom.getLongtitude(),
+                    DataMain.exhibits.get(i).exhibitGeom.getLatitude());
+
+            mMap.addMarker(new MarkerOptions().position(exhibitLatLng).title(ms1));
+        }
+
+
+
 
         float zoomLevel = 17.0f;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoomLevel));
