@@ -27,6 +27,15 @@ public class ExhibitGeom {
         return type;
     }
 
+    public double getLatitude(List<Double> coordinates){
+        return coordinates.get(0);
+    }
+
+    public double getLongtitude(List<Double> coordinates){
+        return coordinates.get(1);
+    }
+
+
     public List<Double> getCoordinates() {
         return coordinates;
     }
