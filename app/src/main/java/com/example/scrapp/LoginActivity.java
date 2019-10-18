@@ -1,9 +1,12 @@
 package com.example.scrapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,6 +39,8 @@ public class LoginActivity extends BaseActivity implements
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
+
+    ImageView photoTaken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,10 @@ public class LoginActivity extends BaseActivity implements
                 // [END_EXCLUDE]
             }
         }
+
+        // User took a picture
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        photoTaken.setImageBitmap(bitmap);
     }
     // [END onactivityresult]
 
@@ -198,6 +207,9 @@ public class LoginActivity extends BaseActivity implements
         } else if(i == R.id.goToMap){
             Intent listIntent = new Intent(this, LocationMapActivity.class);
             startActivity(listIntent);
+        } else if(i == R.id.goToCamera){
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, 0);
         }
     }
 }
