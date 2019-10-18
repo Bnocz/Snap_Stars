@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--This is where we put our google map API keys-->
-    <!--You shouldn't see this, Mike PART 3-->
-    <string name="google_maps_key_string">AIzaSyDmHvMCvD6gjk3IxyhM_ecyqmvuKwCRDXI</string>
-
-
-</resources>
