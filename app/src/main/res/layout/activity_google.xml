@@ -39,6 +39,13 @@
             android:onClick="onClick"
             android:text="Go to map" />
 
+        <Button
+            android:id="@+id/goToCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Go to camera" />
+
     </LinearLayout>
 
 
