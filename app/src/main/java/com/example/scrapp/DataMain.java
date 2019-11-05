@@ -141,11 +141,8 @@ public class DataMain extends AppCompatActivity {
 
         while (true) {
             if (userLocationFound) {
-                apiURL10ResultsNearby = "https://opendata.vancouver.ca/api/records/1" +
-                        ".0/search/?dataset=public-art&rows" +
-                        "=10" +
-                        "&refine.status=In+place&geofilter.distance=" + df.format(this.getUserLatitude()) +
-                        "%2C+" + df.format(this.getUserLongtitude()) + "%2C+" + "2000";
+                apiURL10ResultsNearby = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place&geofilter.distance=" + df.format(this.getUserLatitude()) + "%2C+" + df.format(this.getUserLongtitude()) + "%2C+" + "2000";
+                Log.e("API URL", apiURL10ResultsNearby);
                 break;
             }
         }

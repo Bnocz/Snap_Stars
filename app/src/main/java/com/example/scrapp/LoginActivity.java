@@ -5,10 +5,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -42,10 +46,17 @@ public class LoginActivity extends BaseActivity implements
 
     ImageView photoTaken;
 
+    static ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google);
+
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
+
+
 
         // Views
         mStatusTextView = findViewById(R.id.status);
@@ -70,6 +81,13 @@ public class LoginActivity extends BaseActivity implements
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.actionbar_list_activity, menu);
+        return true;
     }
 
     // [START on_start_check_user]
@@ -204,8 +222,26 @@ public class LoginActivity extends BaseActivity implements
             signOut();
         } else if (i == R.id.disconnectButton) {
             revokeAccess();
-        } else if(i == R.id.goToMap){
+        } else if(i == R.id.goToMap) {
             Intent listIntent = new Intent(this, LocationMapActivity.class);
+            startActivity(listIntent);
+        }else if (i == R.id.goToList) {
+            Intent listIntent = new Intent(this, LocationListActivity.class);
+            startActivity(listIntent);
+        } else if(i == R.id.goToCamera){
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, 0);
+        }
+    }
+
+    public void onClickActionBar(MenuItem mi) {
+        Log.e("Check 2", mi.toString());
+        int i = mi.getItemId();
+        if (i == R.id.goToMap) {
+            Intent listIntent = new Intent(this, LocationMapActivity.class);
+            startActivity(listIntent);
+        }else if (i == R.id.goToList) {
+            Intent listIntent = new Intent(this, LocationListActivity.class);
             startActivity(listIntent);
         } else if(i == R.id.goToCamera){
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
