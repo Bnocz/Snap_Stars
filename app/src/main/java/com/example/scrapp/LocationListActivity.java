@@ -4,10 +4,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class LocationListActivity extends AppCompatActivity {
 
@@ -18,25 +28,77 @@ public class LocationListActivity extends AppCompatActivity {
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
+
+        displayExhibits();
     }
 
 
+    //Creates a Layout and View for each title.
+    private void displayExhibits(){
+        for (Exhibit exhibit : DataMain.exhibits) {
 
+            ArrayList<Exhibit> exhibits = DataMain.exhibits;
 
-    public void btnSendToDetail(View view) {
-        Intent detailIntent = new Intent(this, LocationDetailActivity.class);
-        startActivity(detailIntent);
+            // Outermost Layout
+            LinearLayout displayLayout = findViewById(R.id.list_items);
+
+            // Parent Layout
+            LinearLayout groupingLayout = new LinearLayout(this);
+            groupingLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(10, 10, 0, 10);
+            groupingLayout.setLayoutParams(lp);
+
+            try {
+                ImageView thumbnail = new ImageView(this);
+                Bitmap bitmap = exhibit.getExhibitPhoto().getDisplayphoto();
+                thumbnail.setImageBitmap(bitmap);
+                thumbnail.setAdjustViewBounds(true);
+                thumbnail.setMaxHeight(200);
+                thumbnail.setMaxWidth(200);
+                groupingLayout.addView(thumbnail);
+            } catch (Exception e) {
+                Log.e("DisplayImage", "Display image not found: " + e);
+            }
+
+            // TextView Layout
+            LinearLayout textViewLayout = new LinearLayout(this);
+            textViewLayout.setOrientation(LinearLayout.VERTICAL);
+
+            TextView exhibitType = setupListItemAttributeLine1(exhibit.getType());
+            TextView exhibitAddress = setupListItemAttributeLine2(exhibit.getSiteaddress());
+
+            // Nesting (non-image)layouts and views
+            textViewLayout.addView(exhibitType);
+            textViewLayout.addView(exhibitAddress);
+            groupingLayout.addView(textViewLayout);
+            displayLayout.addView(groupingLayout);
+        }
     }
 
-    public void btnSendToMap(View view) {
-        Intent mapIntent = new Intent(this, LocationMapActivity.class);
-        startActivity(mapIntent);
+
+    public TextView setupListItemAttributeLine1(String text){
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setId(View.generateViewId());
+        textView.setTextSize(17);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        textView.setPadding(10,0,10,0);
+
+        return textView;
     }
 
-//    public void btnSendToSettings(View view) {
-//        Intent settingsIntent = new Intent(this, UserMenuActivity.class);
-//        startActivity(settingsIntent);
-//    }
+    public TextView setupListItemAttributeLine2(String text){
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setId(View.generateViewId());
+        textView.setTextSize(17);
+        textView.setPadding(10,2,10,0);
+
+        return textView;
+    }
+
 
     // Actionbar Stuff
     @Override

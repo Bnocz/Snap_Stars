@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.BitmapCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -175,9 +177,6 @@ public class DataMain extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 JSONObject jsonObjectFields = jsonObject.getJSONObject("fields");
 
-
-
-
                 //Create an ExhibitPhoto Object from JSON
                 HashMap <String, Object> photoAttributes = ExhibitPhoto.getExhibitPhotoBaseAttributes();
 
@@ -186,12 +185,25 @@ public class DataMain extends AppCompatActivity {
 
                 try{
                     jsonObjectPhotoURL = jsonObjectFields.getJSONObject("photourl");
-                    photoSuccess = true;
+
+                    ImageDownloadTask downloadTask = new ImageDownloadTask();
+                    Bitmap bmpimg = null;
+
+                    String apiImageResult = "https://covapp.vancouver.ca/PublicArtRegistry/ImageDisplay." + jsonObjectPhotoURL.get("format");
+
+                    try {
+                        bmpimg = downloadTask.execute(apiImageResult).get();
+                        photoAttributes.put("displayphoto", bmpimg);
+                        photoSuccess = true;
+                    } catch (Exception e) {
+                        Log.e("Photo/JSON Error ", e.toString());
+                    }
+
                 } catch (Exception e) {
                     Log.e("Check", "ExhibitPhoto Creation Error " + e);
                 }
 
-                if (photoSuccess = true) {
+                if (photoSuccess == true) {
                     try{photoAttributes.put("mimetype", jsonObjectPhotoURL.get("mimetype"));}catch(Exception e){};
                     try{photoAttributes.put("format", jsonObjectPhotoURL.get("format"));}catch(Exception e){
                         Log.e("Check", "ExhibitPhoto Creation Error " + e);
@@ -203,9 +215,6 @@ public class DataMain extends AppCompatActivity {
 
                     newExhibitPhoto = new ExhibitPhoto(photoAttributes);
                 }
-
-
-
 
                 //Create an ExhibitGeom Object from JSON
                 try{

@@ -1,5 +1,7 @@
 package com.example.scrapp;
 
+import android.graphics.Bitmap;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ import java.lang.StringBuilder;
 
 public class ExhibitPhoto {
 
+    private Bitmap displayphoto;
     private String mimetype;
     private String format;
     private String filename;
@@ -18,6 +21,7 @@ public class ExhibitPhoto {
 
     public ExhibitPhoto(HashMap photoAttributes) {
         super();
+        this.displayphoto = (Bitmap) photoAttributes.get("displayphoto");
         this.mimetype = photoAttributes.get("id").toString();
         this.format = photoAttributes.get("format").toString();
         this.filename = photoAttributes.get("filename").toString();
@@ -38,6 +42,9 @@ public class ExhibitPhoto {
         return photoAttributes;
     }
 
+    public Bitmap getDisplayphoto () {return displayphoto; }
+
+    public void setDisplayphoto (Bitmap displayphoto){this.displayphoto = displayphoto;}
 
     public String getMimetype() {
         return mimetype;
