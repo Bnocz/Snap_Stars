@@ -3,17 +3,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/goToList"
-        android:icon="@drawable/list_marker"
+        android:id="@+id/goBack"
+        android:icon="@drawable/back_icon"
         android:title="List"
         app:showAsAction="ifRoom"
-        android:onClick="onClickActionBar">
-    </item>
-    <item
-        android:id="@+id/goToMap"
-        android:icon="@drawable/map_marker"
-        app:showAsAction="ifRoom"
-        android:title="Map"
         android:onClick="onClickActionBar">
     </item>
 </menu>
