@@ -35,13 +35,6 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     public void onClickActionBar(MenuItem mi) {
-        int i = mi.getItemId();
-        if (i == R.id.goToMap) {
-            Intent listIntent = new Intent(this, LocationMapActivity.class);
-            startActivity(listIntent);
-        }else if (i == R.id.goToList) {
-            Intent listIntent = new Intent(this, LocationListActivity.class);
-            startActivity(listIntent);
-        }
+            finish();
     }
 }

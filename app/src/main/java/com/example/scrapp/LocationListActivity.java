@@ -42,9 +42,18 @@ public class LocationListActivity extends AppCompatActivity {
             // Outermost Layout
             LinearLayout displayLayout = findViewById(R.id.list_items);
 
-            // Parent Layout
+            // Grouping Layout
             LinearLayout groupingLayout = new LinearLayout(this);
             groupingLayout.setOrientation(LinearLayout.HORIZONTAL);
+            groupingLayout.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    Log.e("Check 1", view.toString());
+                    Intent intent = new Intent(view.getContext(), LocationDetailActivity.class);
+                    startActivity(intent);
+                }
+            });
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(10, 10, 0, 10);
@@ -99,7 +108,6 @@ public class LocationListActivity extends AppCompatActivity {
         return textView;
     }
 
-
     // Actionbar Stuff
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,4 +120,6 @@ public class LocationListActivity extends AppCompatActivity {
         Intent listIntent = new Intent(this, LocationMapActivity.class);
         startActivity(listIntent);
     }
+
+
 }
