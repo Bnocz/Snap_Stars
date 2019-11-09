@@ -1,13 +1,16 @@
 package com.example.scrapp;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import java.lang.StringBuilder;
 
-public class ExhibitPhoto {
+public class ExhibitPhoto implements Parcelable {
 
     private Bitmap displayphoto;
     private String mimetype;
@@ -29,6 +32,36 @@ public class ExhibitPhoto {
         this.id = photoAttributes.get("id").toString();
         this.height = (int) photoAttributes.get("height");
     }
+
+    protected ExhibitPhoto(Parcel in) {
+        displayphoto = in.readParcelable(Bitmap.class.getClassLoader());
+        mimetype = in.readString();
+        format = in.readString();
+        filename = in.readString();
+        if (in.readByte() == 0) {
+            width = null;
+        } else {
+            width = in.readInt();
+        }
+        id = in.readString();
+        if (in.readByte() == 0) {
+            height = null;
+        } else {
+            height = in.readInt();
+        }
+    }
+
+    public static final Creator<ExhibitPhoto> CREATOR = new Creator<ExhibitPhoto>() {
+        @Override
+        public ExhibitPhoto createFromParcel(Parcel in) {
+            return new ExhibitPhoto(in);
+        }
+
+        @Override
+        public ExhibitPhoto[] newArray(int size) {
+            return new ExhibitPhoto[size];
+        }
+    };
 
     public static HashMap getExhibitPhotoBaseAttributes() {
         HashMap<String, Object> photoAttributes = new HashMap<String, Object>() {{
@@ -109,4 +142,29 @@ public class ExhibitPhoto {
                 .append(" additionalProperties: " + additionalProperties).toString();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeParcelable(displayphoto, i);
+        parcel.writeString(mimetype);
+        parcel.writeString(format);
+        parcel.writeString(filename);
+        if (width == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(width);
+        }
+        parcel.writeString(id);
+        if (height == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(height);
+        }
+    }
 }

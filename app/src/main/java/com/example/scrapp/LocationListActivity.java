@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LocationListActivity extends AppCompatActivity {
+
+    public static Bitmap currentDetailsDisplayPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class LocationListActivity extends AppCompatActivity {
 
     //Creates a Layout and View for each title.
     private void displayExhibits(){
-        for (Exhibit exhibit : DataMain.exhibits) {
+        for (final Exhibit exhibit : DataMain.exhibits) {
 
             ArrayList<Exhibit> exhibits = DataMain.exhibits;
 
@@ -49,8 +53,18 @@ public class LocationListActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view) {
-                    Log.e("Check 1", view.toString());
+
+                    currentDetailsDisplayPhoto = exhibit.getExhibitPhoto().getDisplayphoto();
+                    Log.e("Check 665", currentDetailsDisplayPhoto.toString());
+
+                    //Put exhibit object in intent
                     Intent intent = new Intent(view.getContext(), LocationDetailActivity.class);
+                    intent.putExtra("exhibitObject", exhibit);
+
+                    //Add display photo (Bitmap) to parcel
+//                    Parcel parcel = Parcel.obtain();
+//                    exhibit.getExhibitPhoto().getDisplayphoto().writeToParcel(parcel, 0);
+
                     startActivity(intent);
                 }
             });
@@ -119,6 +133,10 @@ public class LocationListActivity extends AppCompatActivity {
     public void onClickActionBar(MenuItem mi) {
         Intent listIntent = new Intent(this, LocationMapActivity.class);
         startActivity(listIntent);
+    }
+
+    public static Bitmap getCurrentDisplayPhoto(){
+        return currentDetailsDisplayPhoto;
     }
 
 

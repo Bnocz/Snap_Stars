@@ -1,12 +1,16 @@
 package com.example.scrapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.lang.StringBuilder;
 
 
-public class ExhibitGeom {
+public class ExhibitGeom implements Parcelable {
 
     public String type;
     public List<Double> coordinates = null;
@@ -22,6 +26,22 @@ public class ExhibitGeom {
         this.type = type;
         this.coordinates = coordinates;
     }
+
+    protected ExhibitGeom(Parcel in) {
+        type = in.readString();
+    }
+
+    public static final Creator<ExhibitGeom> CREATOR = new Creator<ExhibitGeom>() {
+        @Override
+        public ExhibitGeom createFromParcel(Parcel in) {
+            return new ExhibitGeom(in);
+        }
+
+        @Override
+        public ExhibitGeom[] newArray(int size) {
+            return new ExhibitGeom[size];
+        }
+    };
 
     public String getType() {
         return type;
@@ -54,4 +74,13 @@ public class ExhibitGeom {
                 " additionalProperties: " + additionalProperties).toString();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(type);
+    }
 }

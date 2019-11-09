@@ -1,9 +1,13 @@
 package com.example.scrapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.StringBuilder;
-public class Exhibit {
+public class Exhibit implements Parcelable {
 
     private String sitename;
     private String status;
@@ -35,6 +39,35 @@ public class Exhibit {
         this.type = exhibitAttributes.get("type").toString();
         this.locationonsite = exhibitAttributes.get("locationonsite").toString();
     }
+
+    protected Exhibit(Parcel in) {
+        sitename = in.readString();
+        status = in.readString();
+        descriptionofwork = in.readString();
+        url = in.readString();
+        if (in.readByte() == 0) {
+            registryid = null;
+        } else {
+            registryid = in.readInt();
+        }
+        artists = in.readString();
+        siteaddress = in.readString();
+        geoLocalArea = in.readString();
+        type = in.readString();
+        locationonsite = in.readString();
+    }
+
+    public static final Creator<Exhibit> CREATOR = new Creator<Exhibit>() {
+        @Override
+        public Exhibit createFromParcel(Parcel in) {
+            return new Exhibit(in);
+        }
+
+        @Override
+        public Exhibit[] newArray(int size) {
+            return new Exhibit[size];
+        }
+    };
 
     public static HashMap getExhibitBaseAttributes() {
         HashMap<String, Object> photoAttributes = new HashMap<String, Object>() {{
@@ -126,4 +159,27 @@ public class Exhibit {
                 .append("additionalProperties: " + additionalProperties).toString();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(sitename);
+        parcel.writeString(status);
+        parcel.writeString(descriptionofwork);
+        parcel.writeString(url);
+        if (registryid == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(registryid);
+        }
+        parcel.writeString(artists);
+        parcel.writeString(siteaddress);
+        parcel.writeString(geoLocalArea);
+        parcel.writeString(type);
+        parcel.writeString(locationonsite);
+    }
 }
