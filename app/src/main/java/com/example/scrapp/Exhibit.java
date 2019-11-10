@@ -1,5 +1,6 @@
 package com.example.scrapp;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -87,6 +88,7 @@ public class Exhibit implements Parcelable {
         return photoAttributes;
     }
 
+    public void setBitmap(Bitmap bitmap) {this.exhibitPhoto.displayphoto = bitmap;}
 
     public String getSitename() {
         return sitename;
@@ -95,7 +97,6 @@ public class Exhibit implements Parcelable {
     public String getStatus() {
         return status;
     }
-
 
     public String getDescriptionofwork() {
         return descriptionofwork;

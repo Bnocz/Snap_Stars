@@ -60,11 +60,7 @@ public class LocationListActivity extends AppCompatActivity {
                     //Put exhibit object in intent
                     Intent intent = new Intent(view.getContext(), LocationDetailActivity.class);
                     intent.putExtra("exhibitObject", exhibit);
-
-                    //Add display photo (Bitmap) to parcel
-//                    Parcel parcel = Parcel.obtain();
-//                    exhibit.getExhibitPhoto().getDisplayphoto().writeToParcel(parcel, 0);
-
+                    intent.putExtra("sourceActivity", "LocationListActivity");
                     startActivity(intent);
                 }
             });
@@ -78,8 +74,8 @@ public class LocationListActivity extends AppCompatActivity {
                 Bitmap bitmap = exhibit.getExhibitPhoto().getDisplayphoto();
                 thumbnail.setImageBitmap(bitmap);
                 thumbnail.setAdjustViewBounds(true);
-                thumbnail.setMaxHeight(200);
-                thumbnail.setMaxWidth(200);
+                thumbnail.setMaxHeight(250);
+                thumbnail.setMaxWidth(250);
                 groupingLayout.addView(thumbnail);
             } catch (Exception e) {
                 Log.e("DisplayImage", "Display image not found: " + e);
@@ -91,10 +87,12 @@ public class LocationListActivity extends AppCompatActivity {
 
             TextView exhibitType = setupListItemAttributeLine1(exhibit.getType());
             TextView exhibitAddress = setupListItemAttributeLine2(exhibit.getSiteaddress());
+            TextView exhibitArea = setupListItemAttributeLine2(exhibit.getGeoLocalArea());
 
             // Nesting (non-image)layouts and views
             textViewLayout.addView(exhibitType);
             textViewLayout.addView(exhibitAddress);
+            textViewLayout.addView(exhibitArea);
             groupingLayout.addView(textViewLayout);
             displayLayout.addView(groupingLayout);
         }

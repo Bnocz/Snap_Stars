@@ -12,7 +12,7 @@ import java.lang.StringBuilder;
 
 public class ExhibitPhoto implements Parcelable {
 
-    private Bitmap displayphoto;
+    public Bitmap displayphoto;
     private String mimetype;
     private String format;
     private String filename;
