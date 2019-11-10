@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -53,8 +54,8 @@ public class LocationListActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view) {
-
                     currentDetailsDisplayPhoto = exhibit.getExhibitPhoto().getDisplayphoto();
+
                     Log.e("Check 665", currentDetailsDisplayPhoto.toString());
 
                     //Put exhibit object in intent

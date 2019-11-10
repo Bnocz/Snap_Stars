@@ -31,8 +31,19 @@
                     android:padding="0dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp"
                     android:src="@drawable/default_photo"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_photo_prompt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Tap to Open Camera"
+                    android:textAlignment="center"
+                    android:textColor="@color/photo_prompt"
+                    android:textFontWeight="20"
+                    android:textSize="14sp" />
+
 
                 <TextView
                     android:id="@+id/tv_type"

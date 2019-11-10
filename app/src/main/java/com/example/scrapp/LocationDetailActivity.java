@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -44,14 +48,15 @@ public class LocationDetailActivity extends AppCompatActivity {
         String sourceActivity = i.getStringExtra("sourceActivity");
 
         // Sets up the display photo (grabbed from whichever activity brought us here).
-        if (sourceActivity.equals("LocationListActivity")) {
-            displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
-//        } else if (sourceActivity.equals("LocationMapActivity")) {
-//            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
-        }
-
         ImageView photo = findViewById(R.id.iv_photo);
-        photo.setImageBitmap(displayPhoto);
+
+            if (sourceActivity.equals("LocationListActivity")) {
+                displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
+                //        } else if (sourceActivity.equals("LocationMapActivity")) {
+                //            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
+            }
+            displayPhoto = this.toGrayscale(displayPhoto);
+            photo.setImageBitmap(displayPhoto);
 
         populateFields();
     }
@@ -63,7 +68,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         type.setText(Html.fromHtml(typeText, 0));
 
         TextView area = findViewById(R.id.tv_area);
-        String areaText = "<b> Address: </b>" + exhibit.getGeoLocalArea();
+        String areaText = "<b> Area: </b>" + exhibit.getGeoLocalArea();
         area.setText(Html.fromHtml(areaText, 0));
 
         TextView address = findViewById(R.id.tv_address);
@@ -84,6 +89,24 @@ public class LocationDetailActivity extends AppCompatActivity {
         String linkURL = exhibit.getUrl();
         String linkText = "<a href='" + linkURL + "'><b> More Info: </b>" + linkURL;
         link.setText(Html.fromHtml(linkText, Html.FROM_HTML_MODE_COMPACT));
+    }
+
+    public Bitmap toGrayscale(Bitmap bmpOriginal)
+    {
+        int width;
+        int height;
+        height = bmpOriginal.getHeight();
+        width = bmpOriginal.getWidth();
+
+        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmpGrayscale);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        return bmpGrayscale;
     }
 
     public void onBackClick(View v) {

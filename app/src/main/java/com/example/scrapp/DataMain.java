@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -181,7 +182,6 @@ public class DataMain extends AppCompatActivity {
                 HashMap <String, Object> photoAttributes = ExhibitPhoto.getExhibitPhotoBaseAttributes();
 
                 JSONObject jsonObjectPhotoURL = null;
-                boolean photoSuccess = false;
 
                 try{
                     jsonObjectPhotoURL = jsonObjectFields.getJSONObject("photourl");
@@ -191,30 +191,25 @@ public class DataMain extends AppCompatActivity {
 
                     String apiImageResult = "https://covapp.vancouver.ca/PublicArtRegistry/ImageDisplay." + jsonObjectPhotoURL.get("format");
 
-                    try {
-                        bmpimg = downloadTask.execute(apiImageResult).get();
-                        photoAttributes.put("displayphoto", bmpimg);
-                        photoSuccess = true;
-                    } catch (Exception e) {
-                        Log.e("Photo/JSON Error ", e.toString());
-                    }
+                    bmpimg = downloadTask.execute(apiImageResult).get();
+                    photoAttributes.put("displayphoto", bmpimg);
 
                 } catch (Exception e) {
                     Log.e("Check", "ExhibitPhoto Creation Error " + e);
+                    photoAttributes.put("displayphoto", BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                            R.drawable.default_photo));
                 }
 
-                if (photoSuccess == true) {
-                    try{photoAttributes.put("mimetype", jsonObjectPhotoURL.get("mimetype"));}catch(Exception e){};
-                    try{photoAttributes.put("format", jsonObjectPhotoURL.get("format"));}catch(Exception e){
-                        Log.e("Check", "ExhibitPhoto Creation Error " + e);
-                    }
-                    try{photoAttributes.put("filename", jsonObjectPhotoURL.get("filename"));}catch(Exception e){};
-                    try{photoAttributes.put("width", jsonObjectPhotoURL.get("width"));}catch(Exception e){};
-                    try{photoAttributes.put("id", jsonObjectPhotoURL.get("id"));}catch(Exception e){};
-                    try{photoAttributes.put("height", jsonObjectPhotoURL.get("height"));}catch(Exception e){};
-
-                    newExhibitPhoto = new ExhibitPhoto(photoAttributes);
+                try{photoAttributes.put("mimetype", jsonObjectPhotoURL.get("mimetype"));}catch(Exception e){};
+                try{photoAttributes.put("format", jsonObjectPhotoURL.get("format"));}catch(Exception e){
+                    Log.e("Check", "ExhibitPhoto Creation Error " + e);
                 }
+                try{photoAttributes.put("filename", jsonObjectPhotoURL.get("filename"));}catch(Exception e){};
+                try{photoAttributes.put("width", jsonObjectPhotoURL.get("width"));}catch(Exception e){};
+                try{photoAttributes.put("id", jsonObjectPhotoURL.get("id"));}catch(Exception e){};
+                try{photoAttributes.put("height", jsonObjectPhotoURL.get("height"));}catch(Exception e){};
+
+                newExhibitPhoto = new ExhibitPhoto(photoAttributes);
 
                 //Create an ExhibitGeom Object from JSON
                 try{
