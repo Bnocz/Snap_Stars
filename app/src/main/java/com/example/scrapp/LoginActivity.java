@@ -298,4 +298,6 @@ public class LoginActivity extends BaseActivity implements
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
+
+
 }

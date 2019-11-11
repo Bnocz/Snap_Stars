@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class DataMain extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.loading_screen);
 
         setupLocationServices();
 
@@ -54,7 +56,14 @@ public class DataMain extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                findExhibitsByApi();
+                try {
+                    findExhibitsByApi();
+                } catch (Exception e) {
+                    Log.e("Error", "findExhibitsByApi Error: " + e);
+                } finally {
+                    Intent loginIntent = new Intent(context, LoginActivity.class);
+                    startActivity(loginIntent);
+                }
             }
         }, 5000);
 
@@ -68,9 +77,6 @@ public class DataMain extends AppCompatActivity {
 //            }
 //            }
 //        }, 10000);
-
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
 
     }
 
@@ -160,6 +166,8 @@ public class DataMain extends AppCompatActivity {
             Log.e("Exhibits/JSON Error ", e.toString());
         }
 
+
+
     }
 
     // Takes a JSON array and turns it into multiple Exhibit objects
@@ -230,9 +238,6 @@ public class DataMain extends AppCompatActivity {
                     Log.e("Check", "ExhibitGeom Creation Error " + e);
                 }
 
-
-
-
                 //Create an Exhibit Object from JSON
                 HashMap <String, Object> exhibitAttributes = Exhibit.getExhibitBaseAttributes();
 
@@ -286,5 +291,26 @@ public class DataMain extends AppCompatActivity {
     public ArrayList<Exhibit> getNearbyExhibits(){
         return exhibits;
     }
+
+//    private void showLoadingScreen() {
+//        View loadingScreen = findViewById(R.id.loadingScreen);
+//
+//        loadingScreen.setVisibility(View.VISIBLE);
+//    }
+//
+//    private void endLoadingScreen() {
+//        final View loadingScreen = findViewById(R.id.loadingScreen);
+//
+//        loadingScreen.animate().alpha(0).setDuration(100);
+//
+//        loadingScreen.setVisibility(View.GONE);
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                loadingScreen.setVisibility(View.GONE);
+//            }
+//        }, 1500);
+
 
 }

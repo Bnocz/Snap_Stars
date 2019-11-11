@@ -14,5 +14,8 @@
 
     <!-- Custom Colors -->
     <color name="photo_prompt">#1ABC9C</color>
+    <color name="loading_text">#1ABC9C</color>
+    <color name="darkGrey">#161616</color>
+    <color name="OffWhite">#c9c9c9</color>
 
 </resources>

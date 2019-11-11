@@ -92,7 +92,9 @@ public class LocationListActivity extends AppCompatActivity {
 
             // Nesting (non-image)layouts and views
             textViewLayout.addView(exhibitType);
-            textViewLayout.addView(exhibitAddress);
+            if (!exhibitAddress.getText().equals("")) {
+                textViewLayout.addView(exhibitAddress);
+            }
             textViewLayout.addView(exhibitArea);
             groupingLayout.addView(textViewLayout);
             displayLayout.addView(groupingLayout);
