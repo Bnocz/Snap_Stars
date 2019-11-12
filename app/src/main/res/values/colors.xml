@@ -13,6 +13,7 @@
     <color name="grey_500">#9E9E9E</color>
 
     <!-- Custom Colors -->
+    <color name="primary_green">#1ABC9C</color>
     <color name="photo_prompt">#1ABC9C</color>
     <color name="loading_text">#1ABC9C</color>
     <color name="darkGrey">#161616</color>

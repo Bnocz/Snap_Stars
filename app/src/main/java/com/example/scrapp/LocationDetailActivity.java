@@ -87,7 +87,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         link.setClickable(true);
         link.setMovementMethod(LinkMovementMethod.getInstance());
         String linkURL = exhibit.getUrl();
-        String linkText = "<a href='" + linkURL + "'><b> More Info: </b>" + linkURL;
+        String linkText = "<b> More Info: </b><a href='" + linkURL + "'>" + linkURL;
         link.setText(Html.fromHtml(linkText, Html.FROM_HTML_MODE_COMPACT));
     }
 

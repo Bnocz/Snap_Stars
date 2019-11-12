@@ -37,9 +37,11 @@ public class DataMain extends AppCompatActivity {
 
     // User Location Variables
     static LatLng userCoor;
+    static int apiResultsCount = 10;
+    static int apiResultsStartIndex = 0;
     LocationManager locationManager;
     LocationListener locationListener;
-    private boolean userLocationFound = false;
+    private static boolean userLocationFound = false;
 
 
     // Exhibit Data Variables
@@ -57,7 +59,7 @@ public class DataMain extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    findExhibitsByApi();
+                    findExhibitsByApi(context);
                 } catch (Exception e) {
                     Log.e("Error", "findExhibitsByApi Error: " + e);
                 } finally {
@@ -141,7 +143,7 @@ public class DataMain extends AppCompatActivity {
     }
 
     // Pulls exhibit data from the API
-    public void findExhibitsByApi() {
+    public static void findExhibitsByApi(Context context) {
         DownloadTask downloadTask = new DownloadTask();
 
         DecimalFormat df = new DecimalFormat("##0.000000");
@@ -150,7 +152,7 @@ public class DataMain extends AppCompatActivity {
 
         while (true) {
             if (userLocationFound) {
-                apiURL10ResultsNearby = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=10&refine.status=In+place&geofilter.distance=" + df.format(this.getUserLatitude()) + "%2C+" + df.format(this.getUserLongtitude()) + "%2C+" + "2000";
+                apiURL10ResultsNearby = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=public-art&rows=" + getApiResultsCount() + "&start=" + getApiResultsStartIndex() + "&refine.status=In+place&geofilter.distance=" + df.format(getUserLatitude()) + "%2C+" + df.format(getUserLongtitude()) + "%2C+" + "100000";
                 Log.e("API URL", apiURL10ResultsNearby);
                 break;
             }
@@ -158,7 +160,7 @@ public class DataMain extends AppCompatActivity {
 
 
         try {
-            exhibits = createExhibitsFromJSON(downloadTask.execute(apiURL10ResultsNearby).get());
+            exhibits = createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
             System.out.println("Check: exhibits list: " + exhibits);
             System.out.println("Check: # of exhibits processed: " + exhibits.size());
             System.out.println("Check: exhibits created flag: " + exhibitsCreated);
@@ -171,7 +173,7 @@ public class DataMain extends AppCompatActivity {
     }
 
     // Takes a JSON array and turns it into multiple Exhibit objects
-    public ArrayList<Exhibit> createExhibitsFromJSON(JSONArray jsonArray) {
+    public static ArrayList<Exhibit> createExhibitsFromJSON(Context context, JSONArray jsonArray) {
 
         ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
 
@@ -204,7 +206,7 @@ public class DataMain extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Log.e("Check", "ExhibitPhoto Creation Error " + e);
-                    photoAttributes.put("displayphoto", BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                    photoAttributes.put("displayphoto", BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.default_photo));
                 }
 
@@ -280,13 +282,21 @@ public class DataMain extends AppCompatActivity {
         return exhibits;
     }
 
-    public double getUserLatitude(){
+    public static double getUserLatitude(){
         return userCoor.latitude;
     }
 
-    public double getUserLongtitude(){
+    public static double getUserLongtitude(){
         return userCoor.longitude;
     }
+
+    public static int getApiResultsCount() { return apiResultsCount; }
+
+    public static void setApiResultsCount(int newCount) { apiResultsCount = newCount; }
+
+    public static void setApiResultsStartIndex(int newStartIndex) { apiResultsStartIndex = newStartIndex; }
+
+    public static int getApiResultsStartIndex() { return apiResultsStartIndex; }
 
     public ArrayList<Exhibit> getNearbyExhibits(){
         return exhibits;

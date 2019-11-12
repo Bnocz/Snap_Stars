@@ -3,6 +3,7 @@ package com.example.scrapp;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 public class LocationListActivity extends AppCompatActivity {
 
+    private Context context = this;
     public static Bitmap currentDetailsDisplayPhoto;
 
     @Override
@@ -34,15 +36,15 @@ public class LocationListActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
 
-        displayExhibits();
+        displayExhibits(0);
     }
 
 
     //Creates a Layout and View for each title.
-    private void displayExhibits(){
-        for (final Exhibit exhibit : DataMain.exhibits) {
+    private void displayExhibits(int startingIndex){
+        for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
 
-            ArrayList<Exhibit> exhibits = DataMain.exhibits;
+//            ArrayList<Exhibit> exhibits = DataMain.exhibits.subList(startingIndex, );
 
             // Outermost Layout
             LinearLayout displayLayout = findViewById(R.id.list_items);
@@ -140,5 +142,16 @@ public class LocationListActivity extends AppCompatActivity {
         return currentDetailsDisplayPhoto;
     }
 
+    public void generateMoreResults(View view) {
+
+        try {
+            DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
+            DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
+            DataMain.findExhibitsByApi(context);
+            displayExhibits(DataMain.getApiResultsStartIndex());
+        } catch (Exception e) {
+            Log.e("Error", "findExhibitsByApi Error: " + e);
+        }
+    }
 
 }

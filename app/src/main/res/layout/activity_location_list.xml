@@ -25,6 +25,19 @@
 
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/list_more_results"
+                android:onClick="generateMoreResults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:textAlignment="center"
+                android:background="@color/darkGrey"
+                android:textColor="@color/primary_green"
+                android:text="More Results"
+                android:textSize="25dp">
+            </TextView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
