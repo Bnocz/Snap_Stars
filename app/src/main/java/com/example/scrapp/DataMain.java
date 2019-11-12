@@ -143,7 +143,7 @@ public class DataMain extends AppCompatActivity {
     }
 
     // Pulls exhibit data from the API
-    public static void findExhibitsByApi(Context context) {
+    public static boolean findExhibitsByApi(Context context) {
         DownloadTask downloadTask = new DownloadTask();
 
         DecimalFormat df = new DecimalFormat("##0.000000");
@@ -168,7 +168,7 @@ public class DataMain extends AppCompatActivity {
             Log.e("Exhibits/JSON Error ", e.toString());
         }
 
-
+        return true;
 
     }
 
@@ -301,26 +301,4 @@ public class DataMain extends AppCompatActivity {
     public ArrayList<Exhibit> getNearbyExhibits(){
         return exhibits;
     }
-
-//    private void showLoadingScreen() {
-//        View loadingScreen = findViewById(R.id.loadingScreen);
-//
-//        loadingScreen.setVisibility(View.VISIBLE);
-//    }
-//
-//    private void endLoadingScreen() {
-//        final View loadingScreen = findViewById(R.id.loadingScreen);
-//
-//        loadingScreen.animate().alpha(0).setDuration(100);
-//
-//        loadingScreen.setVisibility(View.GONE);
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                loadingScreen.setVisibility(View.GONE);
-//            }
-//        }, 1500);
-
-
 }

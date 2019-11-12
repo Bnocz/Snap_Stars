@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcel;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 public class LocationListActivity extends AppCompatActivity {
 
     private Context context = this;
     public static Bitmap currentDetailsDisplayPhoto;
+    boolean taskComplete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +53,6 @@ public class LocationListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     currentDetailsDisplayPhoto = exhibit.getExhibitPhoto().getDisplayphoto();
-
-                    Log.e("Check 665", currentDetailsDisplayPhoto.toString());
 
                     //Put exhibit object in intent
                     Intent intent = new Intent(view.getContext(), LocationDetailActivity.class);
@@ -144,14 +138,40 @@ public class LocationListActivity extends AppCompatActivity {
 
     public void generateMoreResults(View view) {
 
+        showLoadingScreen();
+
         try {
-            DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
-            DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
-            DataMain.findExhibitsByApi(context);
-            displayExhibits(DataMain.getApiResultsStartIndex());
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
+                    DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
+                    triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                    displayExhibits(DataMain.getApiResultsStartIndex());
+                }
+            }, 2000);
+
         } catch (Exception e) {
             Log.e("Error", "findExhibitsByApi Error: " + e);
         }
+    }
+
+    private void showLoadingScreen() {
+        View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
+        loadingScreen.animate().alpha(1).setDuration(40);
+        loadingScreen.setVisibility(View.VISIBLE);
+    }
+
+    private void endLoadingScreen() {
+        View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
+        loadingScreen.animate().alpha(0).setDuration(40);
+        loadingScreen.setVisibility(View.INVISIBLE);
+    }
+
+    // Triggered when DataMain.findExhibitsByApi finishes
+    private void triggerEndLoadingScreen(boolean result) {
+        endLoadingScreen();
     }
 
 }

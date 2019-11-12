@@ -40,7 +40,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="Tap to Open Camera"
                     android:textAlignment="center"
-                    android:textColor="@color/photo_prompt"
+                    android:textColor="@color/primary_green"
                     android:textFontWeight="20"
                     android:textSize="14sp" />
 

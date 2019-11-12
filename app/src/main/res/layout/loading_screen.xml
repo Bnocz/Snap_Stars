@@ -12,12 +12,8 @@
         android:background="@color/darkGrey"
         android:gravity="center_horizontal|center"
         android:text="LOADING"
-        android:textColor="@color/loading_text"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/primary_green"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

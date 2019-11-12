@@ -47,7 +47,6 @@ public class ImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         }
 
         Bitmap bmpimg = BitmapFactory.decodeStream(in);
-        Log.e("Check 10", "3: " + bmpimg.toString());
         return bmpimg;
     }
 
