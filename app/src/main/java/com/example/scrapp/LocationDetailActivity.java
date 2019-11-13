@@ -52,8 +52,8 @@ public class LocationDetailActivity extends AppCompatActivity {
 
             if (sourceActivity.equals("LocationListActivity")) {
                 displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
-                //        } else if (sourceActivity.equals("LocationMapActivity")) {
-                //            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
+            } else if (sourceActivity.equals("LocationMapActivity")) {
+                displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
             }
             displayPhoto = this.toGrayscale(displayPhoto);
             photo.setImageBitmap(displayPhoto);
