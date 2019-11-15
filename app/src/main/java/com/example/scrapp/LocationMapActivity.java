@@ -15,11 +15,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,6 +58,8 @@ public class LocationMapActivity extends AppCompatActivity
         // Obtain SupportMapFragment and get notified when map is ready
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+
         mapFragment.getMapAsync(this);
 
     }
@@ -60,7 +67,7 @@ public class LocationMapActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        addMarker2Map();
+        addMarker2Map(0);
 
         Intent intent = getIntent();
         if (intent.getIntExtra("Place Number",0) == 0 ) {
@@ -110,9 +117,9 @@ public class LocationMapActivity extends AppCompatActivity
     }
 
     // Adds exhibit location markers to the map.
-    private void addMarker2Map() {
+    private void addMarker2Map(int startingIndex) {
 
-        for (final Exhibit exhibit : DataMain.exhibits) {
+        for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
             LatLng exhibitLatLng = new LatLng(exhibit.exhibitGeom.getLongtitude(),
                     exhibit.exhibitGeom.getLatitude());
 
@@ -155,9 +162,46 @@ public class LocationMapActivity extends AppCompatActivity
             startActivity(listIntent);
     }
 
-
     public static Bitmap getCurrentDisplayPhoto(){
         return currentDetailsDisplayPhoto;
+    }
+
+    public void generateMoreResults(View view) {
+
+        showLoadingScreen();
+
+        try {
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
+                    DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
+                    triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                    addMarker2Map(DataMain.getApiResultsStartIndex());
+                }
+            }, 2000);
+
+        } catch (Exception e) {
+            Log.e("Error", "findExhibitsByApi Error: " + e);
+        }
+    }
+
+    private void showLoadingScreen() {
+        View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
+        loadingScreen.animate().alpha(1).setDuration(40);
+        loadingScreen.setVisibility(View.VISIBLE);
+    }
+
+    private void endLoadingScreen() {
+        View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
+        loadingScreen.animate().alpha(0).setDuration(40);
+        loadingScreen.setVisibility(View.INVISIBLE);
+    }
+
+    // Triggered when DataMain.findExhibitsByApi finishes
+    private void triggerEndLoadingScreen(boolean result) {
+        endLoadingScreen();
     }
 
 }
