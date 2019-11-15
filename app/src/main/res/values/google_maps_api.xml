@@ -21,5 +21,7 @@
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        getResources().getString(R.string.google_maps_key_string)</string>
+        AIzaSyDmHvMCvD6gjk3IxyhM_ecyqmvuKwCRDXI</string>
 </resources>
+
+<!-- Adam's Map Key: AIzaSyDmHvMCvD6gjk3IxyhM_ecyqmvuKwCRDXI -->

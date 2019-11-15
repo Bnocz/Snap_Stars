@@ -1,5 +1,6 @@
 package com.example.scrapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
@@ -41,6 +42,8 @@ import java.util.Date;
 public class LoginActivity extends BaseActivity implements
         View.OnClickListener {
 
+    Context context = this;
+
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
@@ -55,11 +58,11 @@ public class LoginActivity extends BaseActivity implements
     ImageView photoTaken;
 
     static ActionBar actionBar;
+    static boolean loginAttempted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_google);
 
         actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
@@ -67,13 +70,13 @@ public class LoginActivity extends BaseActivity implements
 
 
         // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
+//        mStatusTextView = findViewById(R.id.status);
+//        mDetailTextView = findViewById(R.id.detail);
 
         // Button listeners
-        findViewById(R.id.signInButton).setOnClickListener(this);
-        findViewById(R.id.signOutButton).setOnClickListener(this);
-        findViewById(R.id.disconnectButton).setOnClickListener(this);
+//        findViewById(R.id.signInButton).setOnClickListener(this);
+//        findViewById(R.id.signOutButton).setOnClickListener(this);
+//        findViewById(R.id.disconnectButton).setOnClickListener(this);
 
         // [START config_signin]
         // Configure Google Sign In
@@ -91,25 +94,32 @@ public class LoginActivity extends BaseActivity implements
         // [END initialize_auth]
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar_list_activity, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.actionbar_list_activity, menu);
+//        return true;
+//    }
 
     // [START on_start_check_user]
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
 
-        Intent mapIntent = new Intent(this, LocationMapActivity.class);
-        startActivity(mapIntent);
+            FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        finish();
+            if (currentUser != null || loginAttempted) {
+                Intent mapIntent = new Intent(this, LocationMapActivity.class);
+                startActivity(mapIntent);
+                finish();
+            } else {
+                signIn();
+                //updateUI(currentUser);
+            }
+
+
+
 
     }
     // [END on_start_check_user]
@@ -130,14 +140,14 @@ public class LoginActivity extends BaseActivity implements
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 // [START_EXCLUDE]
-                updateUI(null);
+//                updateUI(null);
                 // [END_EXCLUDE]
             }
         }
 
         // User took a picture
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        photoTaken.setImageBitmap(bitmap);
+//        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+//        photoTaken.setImageBitmap(bitmap);
     }
     // [END onactivityresult]
 
@@ -157,12 +167,19 @@ public class LoginActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+//                            updateUI(user);
+                            Intent mapIntent = new Intent(context, LocationMapActivity.class);
+                            startActivity(mapIntent);
+                            finish();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            updateUI(null);
+//                            updateUI(null);
+                            Intent mapIntent = new Intent(context, LocationMapActivity.class);
+                            startActivity(mapIntent);
+                            finish();
                         }
 
                         // [START_EXCLUDE]
@@ -180,130 +197,130 @@ public class LoginActivity extends BaseActivity implements
     }
     // [END signin]
 
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
+//    private void signOut() {
+//        // Firebase sign out
+//        mAuth.signOut();
+//
+//        // Google sign out
+//        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+//                new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        updateUI(null);
+//                    }
+//                });
+//    }
 
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
-    }
+//    private void revokeAccess() {
+//        // Firebase sign out
+//        mAuth.signOut();
+//
+//        // Google revoke access
+//        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+//                new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        updateUI(null);
+//                    }
+//                });
+//    }
+//
+//    private void updateUI(FirebaseUser user) {
+//        hideProgressDialog();
+//        if (user != null) {
+//            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//
+//            findViewById(R.id.signInButton).setVisibility(View.GONE);
+//            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
+//        } else {
+//            mStatusTextView.setText(R.string.signed_out);
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
+//            findViewById(R.id.signOutAndDisconnect).setVisibility(View.GONE);
+//        }
+//    }
 
-    private void revokeAccess() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google revoke access
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
-    }
-
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.signInButton).setVisibility(View.GONE);
-            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.signOutAndDisconnect).setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        Log.e("Check 1", v.toString());
-        int i = v.getId();
-        if (i == R.id.signInButton) {
-            signIn();
-        } else if (i == R.id.signOutButton) {
-            signOut();
-        } else if (i == R.id.disconnectButton) {
-            revokeAccess();
-        } else if(i == R.id.goToMap) {
-            Intent mapIntent = new Intent(this, LocationMapActivity.class);
-            startActivity(mapIntent);
-        }else if (i == R.id.goToList) {
-            Intent listIntent = new Intent(this, LocationListActivity.class);
-            startActivity(listIntent);
-        } else if(i == R.id.goToCamera){
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, 0);
-        }
-    }
-
-    public void onClickActionBar(MenuItem mi) {
-        Log.e("Check 2", mi.toString());
-        int i = mi.getItemId();
-        if (i == R.id.goToMap) {
-            Intent listIntent = new Intent(this, LocationMapActivity.class);
-            startActivity(listIntent);
-        }else if (i == R.id.goToList) {
-            Intent listIntent = new Intent(this, LocationListActivity.class);
-            startActivity(listIntent);
-        } else if(i == R.id.goToCamera){
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException ex) {
-
-                }
-
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(this,
-                            "com.example.android.fileprovider",
-                            photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                }
-            }
-        }
-    }
-    String currentPhotoPath;
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
+//    @Override
+    public void onClick(View v) {}
+//
+//        Log.e("Check 1", v.toString());
+//        int i = v.getId();
+//        if (i == R.id.signInButton) {
+//            signIn();
+//        } else if (i == R.id.signOutButton) {
+//            signOut();
+//        } else if (i == R.id.disconnectButton) {
+//            revokeAccess();
+//        } else if(i == R.id.goToMap) {
+//            Intent mapIntent = new Intent(this, LocationMapActivity.class);
+//            startActivity(mapIntent);
+//        }else if (i == R.id.goToList) {
+//            Intent listIntent = new Intent(this, LocationListActivity.class);
+//            startActivity(listIntent);
+//        } else if(i == R.id.goToCamera){
+//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, 0);
+//        }
+//    }
+//
+//    public void onClickActionBar(MenuItem mi) {
+//        Log.e("Check 2", mi.toString());
+//        int i = mi.getItemId();
+//        if (i == R.id.goToMap) {
+//            Intent listIntent = new Intent(this, LocationMapActivity.class);
+//            startActivity(listIntent);
+//        }else if (i == R.id.goToList) {
+//            Intent listIntent = new Intent(this, LocationListActivity.class);
+//            startActivity(listIntent);
+//        } else if(i == R.id.goToCamera){
+//            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//
+//                File photoFile = null;
+//                try {
+//                    photoFile = createImageFile();
+//                } catch (IOException ex) {
+//
+//                }
+//
+//                if (photoFile != null) {
+//                    Uri photoURI = FileProvider.getUriForFile(this,
+//                            "com.example.android.fileprovider",
+//                            photoFile);
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//                }
+//            }
+//        }
+//    }
+//    String currentPhotoPath;
+//
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        currentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
+//
+//    private void galleryAddPic() {
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        File f = new File(currentPhotoPath);
+//        Uri contentUri = Uri.fromFile(f);
+//        mediaScanIntent.setData(contentUri);
+//        this.sendBroadcast(mediaScanIntent);
+//    }
 
 
 }
