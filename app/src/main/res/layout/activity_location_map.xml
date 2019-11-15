@@ -4,14 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".LocationMapActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".CurrentLocationActivity" />
+
+    <TextView
+        android:id="@+id/list_more_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="generateMoreResults"
+        android:background="@color/darkGrey"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:text="More Results"
+        android:textAlignment="center"
+        android:textColor="@color/primary_green"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></TextView>
+
+    <TextView
+        android:id="@+id/loadingMoreResultsScreen"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/darkGreyTransparant"
+        android:gravity="center_horizontal|center"
+        android:text="LOADING"
+        android:textColor="@color/primary_green"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

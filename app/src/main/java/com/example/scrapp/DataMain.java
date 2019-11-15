@@ -65,6 +65,7 @@ public class DataMain extends AppCompatActivity {
                 } finally {
                     Intent loginIntent = new Intent(context, LoginActivity.class);
                     startActivity(loginIntent);
+                    finish();
                 }
             }
         }, 5000);
