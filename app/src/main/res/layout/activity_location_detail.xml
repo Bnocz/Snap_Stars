@@ -31,8 +31,8 @@
                     android:padding="0dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:src="@drawable/default_photo"></ImageView>
-
+                    android:onClick="onCameraClick"
+                    android:src="@drawable/default_photo"/>
                 <TextView
                     android:id="@+id/tv_photo_prompt"
                     android:layout_width="match_parent"

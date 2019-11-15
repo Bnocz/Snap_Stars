@@ -2,15 +2,20 @@ package com.example.scrapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -26,7 +31,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 
 import static android.icu.lang.UProperty.INT_START;
 
@@ -34,6 +42,9 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     Exhibit exhibit;
     Bitmap displayPhoto;
+    static final int REQUEST_TAKE_PHOTO = 1;
+    String currentPhotoPath;
+    ImageView photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +59,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         String sourceActivity = i.getStringExtra("sourceActivity");
 
         // Sets up the display photo (grabbed from whichever activity brought us here).
-        ImageView photo = findViewById(R.id.iv_photo);
+         photo = findViewById(R.id.iv_photo);
 
             if (sourceActivity.equals("LocationListActivity")) {
                 displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
@@ -108,7 +119,45 @@ public class LocationDetailActivity extends AppCompatActivity {
         c.drawBitmap(bmpOriginal, 0, 0, paint);
         return bmpGrayscale;
     }
+    public void onCameraClick(View v) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+
+            }
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.scrapp",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                Bitmap myBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                setImageFromCamera(myBitmap);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
     public void onBackClick(View v) {
         finish();
     }
@@ -119,6 +168,10 @@ public class LocationDetailActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.actionbar_details_activity, menu);
         return true;
+    }
+
+    public void setImageFromCamera(Bitmap photoBM) {
+        photo.setImageBitmap(photoBM);
     }
 
     public void onClickActionBar(MenuItem mi) {
