@@ -2,6 +2,7 @@ package com.example.scrapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +11,10 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -26,7 +30,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 
 import static android.icu.lang.UProperty.INT_START;
 
@@ -34,6 +41,9 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     Exhibit exhibit;
     Bitmap displayPhoto;
+    String currentPhotoPath;
+    static final int REQUEST_TAKE_PHOTO = 1;
+    ImageView photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +58,15 @@ public class LocationDetailActivity extends AppCompatActivity {
         String sourceActivity = i.getStringExtra("sourceActivity");
 
         // Sets up the display photo (grabbed from whichever activity brought us here).
-        ImageView photo = findViewById(R.id.iv_photo);
+        photo = findViewById(R.id.iv_photo);
 
-            if (sourceActivity.equals("LocationListActivity")) {
-                displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
-            } else if (sourceActivity.equals("LocationMapActivity")) {
-                displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
-            }
-            displayPhoto = this.toGrayscale(displayPhoto);
-            photo.setImageBitmap(displayPhoto);
+        if (sourceActivity.equals("LocationListActivity")) {
+            displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
+            //        } else if (sourceActivity.equals("LocationMapActivity")) {
+            //            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
+        }
+        displayPhoto = this.toGrayscale(displayPhoto);
+        photo.setImageBitmap(displayPhoto);
 
         populateFields();
     }
@@ -87,7 +97,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         link.setClickable(true);
         link.setMovementMethod(LinkMovementMethod.getInstance());
         String linkURL = exhibit.getUrl();
-        String linkText = "<b> More Info: </b><a href='" + linkURL + "'>" + linkURL;
+        String linkText = "<a href='" + linkURL + "'><b> More Info: </b>" + linkURL;
         link.setText(Html.fromHtml(linkText, Html.FROM_HTML_MODE_COMPACT));
     }
 
@@ -120,8 +130,48 @@ public class LocationDetailActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.actionbar_details_activity, menu);
         return true;
     }
+    public void onCameraClick() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+
+            }
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                photo.setImageURI(photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
     public void onClickActionBar(MenuItem mi) {
-            finish();
+        finish();
     }
 }
+
+
