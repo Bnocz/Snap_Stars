@@ -128,8 +128,7 @@ public class LocationListActivity extends AppCompatActivity {
     }
 
     public void onClickActionBar(MenuItem mi) {
-        Intent listIntent = new Intent(this, LocationMapActivity.class);
-        startActivity(listIntent);
+        finish();
     }
 
     public static Bitmap getCurrentDisplayPhoto(){

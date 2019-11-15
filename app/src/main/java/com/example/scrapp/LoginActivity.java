@@ -105,6 +105,12 @@ public class LoginActivity extends BaseActivity implements
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+
+        Intent mapIntent = new Intent(this, LocationMapActivity.class);
+        startActivity(mapIntent);
+
+        finish();
+
     }
     // [END on_start_check_user]
 
@@ -231,8 +237,8 @@ public class LoginActivity extends BaseActivity implements
         } else if (i == R.id.disconnectButton) {
             revokeAccess();
         } else if(i == R.id.goToMap) {
-            Intent listIntent = new Intent(this, LocationMapActivity.class);
-            startActivity(listIntent);
+            Intent mapIntent = new Intent(this, LocationMapActivity.class);
+            startActivity(mapIntent);
         }else if (i == R.id.goToList) {
             Intent listIntent = new Intent(this, LocationListActivity.class);
             startActivity(listIntent);
