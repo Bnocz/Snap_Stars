@@ -40,7 +40,9 @@ public class LocationListActivity extends AppCompatActivity {
     private void displayExhibits(int startingIndex){
         for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
 
-//            ArrayList<Exhibit> exhibits = DataMain.exhibits.subList(startingIndex, );
+            Log.e("Check 222: ", "" + startingIndex);
+            Log.e("Check 223: ", "" + DataMain.exhibits.size());
+
 
             // Outermost Layout
             LinearLayout displayLayout = findViewById(R.id.list_items);
@@ -62,10 +64,12 @@ public class LocationListActivity extends AppCompatActivity {
                 }
             });
 
+            // Grouping layout margin params
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(10, 10, 0, 10);
             groupingLayout.setLayoutParams(lp);
 
+            // Get and display exhibit thumbnail
             try {
                 ImageView thumbnail = new ImageView(this);
                 Bitmap bitmap = exhibit.getExhibitPhoto().getDisplayphoto();
@@ -127,7 +131,10 @@ public class LocationListActivity extends AppCompatActivity {
         return true;
     }
 
+    // To Map Activity button
     public void onClickActionBar(MenuItem mi) {
+        Intent listIntent = new Intent(this, LocationMapActivity.class);
+        startActivity(listIntent);
         finish();
     }
 
@@ -135,6 +142,7 @@ public class LocationListActivity extends AppCompatActivity {
         return currentDetailsDisplayPhoto;
     }
 
+    // Grabs 10 more results from the API and adds them to the list
     public void generateMoreResults(View view) {
 
         showLoadingScreen();
@@ -144,7 +152,6 @@ public class LocationListActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
                     DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
                     triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
                     displayExhibits(DataMain.getApiResultsStartIndex());

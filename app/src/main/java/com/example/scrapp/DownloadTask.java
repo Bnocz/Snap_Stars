@@ -1,5 +1,6 @@
 package com.example.scrapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -36,18 +37,13 @@ public class DownloadTask extends AsyncTask<String, Void, JSONArray> {
 
             JSONObject jsonObject = new JSONObject(JSON);
             JSONArray jsonArray = jsonObject.getJSONArray("records");
+
             return jsonArray;
         } catch (Exception e) {
             Log.e("DownloadTaskError", "Exception getting JSON from api url " + e);
         }
         return null;
     }
-
-
-    protected void onPostExecute(Boolean result) {
-
-    }
-
 
 }
 

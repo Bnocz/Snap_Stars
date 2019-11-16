@@ -119,7 +119,7 @@ public class LocationMapActivity extends AppCompatActivity
     // Adds exhibit location markers to the map.
     private void addMarker2Map(int startingIndex) {
 
-        for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
+        for (final Exhibit exhibit : DataMain.exhibits) {
             LatLng exhibitLatLng = new LatLng(exhibit.exhibitGeom.getLongtitude(),
                     exhibit.exhibitGeom.getLatitude());
 
@@ -157,15 +157,18 @@ public class LocationMapActivity extends AppCompatActivity
         return true;
     }
 
+    // List activity nav button
     public void onClickActionBar(MenuItem mi) {
             Intent listIntent = new Intent(this, LocationListActivity.class);
             startActivity(listIntent);
+            finish();
     }
 
     public static Bitmap getCurrentDisplayPhoto(){
         return currentDetailsDisplayPhoto;
     }
 
+    // Grabs 10 more results from the api and adds them to the map
     public void generateMoreResults(View view) {
 
         showLoadingScreen();
@@ -175,7 +178,6 @@ public class LocationMapActivity extends AppCompatActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    DataMain.setApiResultsCount(DataMain.getApiResultsCount() + 10);
                     DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
                     triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
                     addMarker2Map(DataMain.getApiResultsStartIndex());

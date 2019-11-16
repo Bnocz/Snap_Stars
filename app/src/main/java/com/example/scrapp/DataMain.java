@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -43,6 +44,9 @@ public class DataMain extends AppCompatActivity {
     LocationListener locationListener;
     private static boolean userLocationFound = false;
 
+    private static boolean foundExhibitsByAPIOnce = false;
+    public static JSONArray tempJSONArr = null;
+    public static ArrayList<Exhibit> tempExhibits;
 
     // Exhibit Data Variables
     static ArrayList<Exhibit> exhibits;
@@ -159,9 +163,15 @@ public class DataMain extends AppCompatActivity {
             }
         }
 
-
         try {
-            exhibits = createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
+            // First time app runs populates exhibits with initial 10. Subsequent times, adds 10 more.
+            if (!foundExhibitsByAPIOnce) {
+                exhibits =  createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
+                foundExhibitsByAPIOnce = true;
+                } else {
+                    tempExhibits = createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
+                    exhibits.addAll(tempExhibits);
+                }
             System.out.println("Check: exhibits list: " + exhibits);
             System.out.println("Check: # of exhibits processed: " + exhibits.size());
             System.out.println("Check: exhibits created flag: " + exhibitsCreated);
@@ -176,7 +186,7 @@ public class DataMain extends AppCompatActivity {
     // Takes a JSON array and turns it into multiple Exhibit objects
     public static ArrayList<Exhibit> createExhibitsFromJSON(Context context, JSONArray jsonArray) {
 
-        ArrayList<Exhibit> exhibits = new ArrayList<Exhibit>();
+        ArrayList<Exhibit> exhibitsTemp = new ArrayList<Exhibit>();
 
         for (int i = 0; i < jsonArray.length(); i++){
 
@@ -272,7 +282,7 @@ public class DataMain extends AppCompatActivity {
                 }
 
                 if (newExhibit != null) {
-                    exhibits.add(newExhibit);
+                    exhibitsTemp.add(newExhibit);
                 }
 
             } catch (Exception e){
@@ -280,7 +290,8 @@ public class DataMain extends AppCompatActivity {
             }
         }
         DataMain.exhibitsCreated = true;
-        return exhibits;
+        return exhibitsTemp;
+
     }
 
     public static double getUserLatitude(){
@@ -293,13 +304,7 @@ public class DataMain extends AppCompatActivity {
 
     public static int getApiResultsCount() { return apiResultsCount; }
 
-    public static void setApiResultsCount(int newCount) { apiResultsCount = newCount; }
-
     public static void setApiResultsStartIndex(int newStartIndex) { apiResultsStartIndex = newStartIndex; }
 
     public static int getApiResultsStartIndex() { return apiResultsStartIndex; }
-
-    public ArrayList<Exhibit> getNearbyExhibits(){
-        return exhibits;
-    }
 }
