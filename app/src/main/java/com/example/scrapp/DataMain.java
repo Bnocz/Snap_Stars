@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,13 +45,12 @@ public class DataMain extends AppCompatActivity {
     LocationListener locationListener;
     private static boolean userLocationFound = false;
 
-    private static boolean foundExhibitsByAPIOnce = false;
-    public static JSONArray tempJSONArr = null;
-    public static ArrayList<Exhibit> tempExhibits;
-
     // Exhibit Data Variables
     static ArrayList<Exhibit> exhibits;
+    public static ArrayList<Exhibit> tempExhibits;
     static boolean exhibitsCreated = false;
+    public static boolean foundExhibitsByAPIOnce = false;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +67,8 @@ public class DataMain extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e("Error", "findExhibitsByApi Error: " + e);
                 } finally {
-                    Intent loginIntent = new Intent(context, LocationMapActivity.class);
-                    startActivity(loginIntent);
+                    Intent mapIntent = new Intent(context, LocationMapActivity.class);
+                    startActivity(mapIntent);
                     finish();
                 }
             }
@@ -166,8 +166,7 @@ public class DataMain extends AppCompatActivity {
         try {
             // First time app runs populates exhibits with initial 10. Subsequent times, adds 10 more.
             if (!foundExhibitsByAPIOnce) {
-                exhibits =  createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
-                foundExhibitsByAPIOnce = true;
+                exhibits = createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
                 } else {
                     tempExhibits = createExhibitsFromJSON(context, downloadTask.execute(apiURL10ResultsNearby).get());
                     exhibits.addAll(tempExhibits);
@@ -178,6 +177,14 @@ public class DataMain extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Exhibits/JSON Error ", e.toString());
         }
+
+        if (exhibits == null || exhibits.isEmpty()) {
+            Toast.makeText(context, "No Exhibits Found In Your Area", Toast.LENGTH_LONG).show();
+            foundExhibitsByAPIOnce = false;
+        } else {
+            foundExhibitsByAPIOnce = true;
+        }
+
 
         return true;
 

@@ -67,7 +67,9 @@ public class LocationMapActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        addMarker2Map(0);
+        if (DataMain.foundExhibitsByAPIOnce) {
+            addMarker2Map(0);
+        }
 
         Intent intent = getIntent();
         if (intent.getIntExtra("Place Number",0) == 0 ) {
@@ -178,9 +180,16 @@ public class LocationMapActivity extends AppCompatActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
-                    triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
-                    addMarker2Map(DataMain.getApiResultsStartIndex());
+                    if (DataMain.foundExhibitsByAPIOnce) {
+                        DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
+                        triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        addMarker2Map(DataMain.getApiResultsStartIndex());
+                    } else {
+                        triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        if (DataMain.foundExhibitsByAPIOnce) {
+                            addMarker2Map(DataMain.getApiResultsStartIndex());
+                        }
+                    }
                 }
             }, 2000);
 

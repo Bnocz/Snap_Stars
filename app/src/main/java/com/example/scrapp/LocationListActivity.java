@@ -32,7 +32,9 @@ public class LocationListActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
 
-        displayExhibits(0);
+        if (DataMain.foundExhibitsByAPIOnce) {
+            displayExhibits(0);
+        }
     }
 
 
@@ -152,9 +154,16 @@ public class LocationListActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
-                    triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
-                    displayExhibits(DataMain.getApiResultsStartIndex());
+                    if (DataMain.foundExhibitsByAPIOnce) {
+                        DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
+                        triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        displayExhibits(DataMain.getApiResultsStartIndex());
+                    } else {
+                        triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        if (DataMain.foundExhibitsByAPIOnce) {
+                            displayExhibits(DataMain.getApiResultsStartIndex());
+                        }
+                    }
                 }
             }, 2000);
 
