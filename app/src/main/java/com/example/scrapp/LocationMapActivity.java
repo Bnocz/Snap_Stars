@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -46,6 +47,8 @@ public class LocationMapActivity extends AppCompatActivity
     private LocationManager locationManager;
     private LocationListener locationListener;
     private boolean mapMoved = false;
+    String best;
+    Marker userMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class LocationMapActivity extends AppCompatActivity
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
+
 
         // Obtain SupportMapFragment and get notified when map is ready
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -74,11 +78,15 @@ public class LocationMapActivity extends AppCompatActivity
         Intent intent = getIntent();
         if (intent.getIntExtra("Place Number",0) == 0 ) {
             // Zoom into users location
-            locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    addUserMarker(location);
+                    Log.e("Check 0: ", "ggg " + DataMain.userCoor.latitude + " : " + DataMain.userCoor.longitude);
+                    Toast.makeText(context, "ggg" + DataMain.userCoor.latitude + " : " + DataMain.userCoor.longitude, Toast.LENGTH_SHORT).show();
+                     addUserMarker(DataMain.userCoor);
                 }
 
                 @Override
@@ -91,25 +99,29 @@ public class LocationMapActivity extends AppCompatActivity
                 public void onProviderDisabled(String s) {}
             };
 
+
+            // Stuff to make onLocationChanged listener work + ask for location permissions
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-                Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                addUserMarker(lastKnownLocation);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                addUserMarker(DataMain.userCoor);
             } else {
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
         }
     }
 
-    // Adds user location marker to the map
-    private void addUserMarker(Location location) {
-        String msg = String.format("Current Location: %4.3f Lat %4.3f Long.",
-                location.getLatitude(),
-                location.getLongitude());
-        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+    // Adds user location marker to the map, removing old one if present
+    private void addUserMarker(LatLng location) {
 
-        Marker marker = mMap.addMarker(new MarkerOptions().position(latlng).title(msg).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        marker.setTag("User");
+        if (userMarker != null) {
+            userMarker.remove();
+        }
+
+        LatLng latlng = new LatLng(location.latitude, location.longitude);
+
+        userMarker = mMap.addMarker(new MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        userMarker.setTag("User");
 
         if (!mapMoved) {
             float zoomLevel = 14.0f;
@@ -147,6 +159,24 @@ public class LocationMapActivity extends AppCompatActivity
                     return false;
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (locationManager != null) {
+                locationManager.requestLocationUpdates(best, 10000, 1, locationListener);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
         }
     }
 

@@ -309,6 +309,8 @@ public class DataMain extends AppCompatActivity {
         return userCoor.longitude;
     }
 
+    public static LatLng getUserLatLng() { return userCoor; }
+
     public static int getApiResultsCount() { return apiResultsCount; }
 
     public static void setApiResultsStartIndex(int newStartIndex) { apiResultsStartIndex = newStartIndex; }
