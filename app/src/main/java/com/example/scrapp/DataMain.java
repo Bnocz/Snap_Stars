@@ -63,7 +63,7 @@ public class DataMain extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e("Error", "findExhibitsByApi Error: " + e);
                 } finally {
-                    Intent loginIntent = new Intent(context, LoginActivity.class);
+                    Intent loginIntent = new Intent(context, LocationMapActivity.class);
                     startActivity(loginIntent);
                     finish();
                 }

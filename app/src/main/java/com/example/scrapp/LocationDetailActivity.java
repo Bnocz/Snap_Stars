@@ -63,8 +63,8 @@ public class LocationDetailActivity extends AppCompatActivity {
 
             if (sourceActivity.equals("LocationListActivity")) {
                 displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
-                //        } else if (sourceActivity.equals("LocationMapActivity")) {
-                //            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
+            } else if (sourceActivity.equals("LocationMapActivity")) {
+                displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
             }
             displayPhoto = this.toGrayscale(displayPhoto);
             photo.setImageBitmap(displayPhoto);
@@ -120,6 +120,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         return bmpGrayscale;
     }
     public void onCameraClick(View v) {
+        Log.e("Check 111: ", "Inside handler");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
