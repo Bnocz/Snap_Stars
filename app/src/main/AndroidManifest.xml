@@ -47,11 +47,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserMenuActivity" />
-        <activity android:name=".LoginActivity" />
         <activity android:name=".ConfirmPicActivity" />
         <activity android:name=".LocationDetailActivity" />
-        <activity android:name=".CreateAccActivity" />
         <activity android:name=".LocationMapActivity" />
         <activity android:name=".LocationListActivity" />
     </application>

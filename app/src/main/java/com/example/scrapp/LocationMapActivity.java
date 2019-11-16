@@ -84,8 +84,7 @@ public class LocationMapActivity extends AppCompatActivity
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    Log.e("Check 0: ", "ggg " + DataMain.userCoor.latitude + " : " + DataMain.userCoor.longitude);
-                    Toast.makeText(context, "ggg" + DataMain.userCoor.latitude + " : " + DataMain.userCoor.longitude, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Your lat/long: " + DataMain.userCoor.latitude + " : " + DataMain.userCoor.longitude, Toast.LENGTH_SHORT).show();
                      addUserMarker(DataMain.userCoor);
                 }
 
@@ -106,7 +105,7 @@ public class LocationMapActivity extends AppCompatActivity
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 addUserMarker(DataMain.userCoor);
             } else {
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
         }
     }
@@ -167,7 +166,8 @@ public class LocationMapActivity extends AppCompatActivity
         super.onResume();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (locationManager != null) {
-                locationManager.requestLocationUpdates(best, 10000, 1, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         }
     }
@@ -178,6 +178,10 @@ public class LocationMapActivity extends AppCompatActivity
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    public void onBackPressed () {
+        moveTaskToBack (true);
     }
 
 

@@ -189,4 +189,8 @@ public class LocationListActivity extends AppCompatActivity {
         endLoadingScreen();
     }
 
+    public void onBackPressed () {
+        moveTaskToBack (true);
+    }
+
 }
