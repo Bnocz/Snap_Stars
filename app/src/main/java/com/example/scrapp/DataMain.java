@@ -39,8 +39,6 @@ public class DataMain extends AppCompatActivity {
 
     // User Location Variables
     static LatLng userCoor;
-    static int apiResultsCount = 10;
-    static int apiResultsStartIndex = 0;
     LocationManager locationManager;
     LocationListener locationListener;
     private static boolean userLocationFound = false;
@@ -48,8 +46,11 @@ public class DataMain extends AppCompatActivity {
     // Exhibit Data Variables
     static ArrayList<Exhibit> exhibits;
     public static ArrayList<Exhibit> tempExhibits;
+    static int apiResultsCount = 10;
+    static int apiResultsStartIndex = 0;
     static boolean exhibitsCreated = false;
     public static boolean foundExhibitsByAPIOnce = false;
+    public static boolean currentlyLoadingExhibits = false;
 
 
     protected void onCreate(Bundle savedInstanceState) {

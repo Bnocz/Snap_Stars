@@ -135,9 +135,11 @@ public class LocationListActivity extends AppCompatActivity {
 
     // To Map Activity button
     public void onClickActionBar(MenuItem mi) {
-        Intent listIntent = new Intent(this, LocationMapActivity.class);
-        startActivity(listIntent);
-        finish();
+        if (!DataMain.currentlyLoadingExhibits) {
+            Intent listIntent = new Intent(this, LocationMapActivity.class);
+            startActivity(listIntent);
+            finish();
+        }
     }
 
     public static Bitmap getCurrentDisplayPhoto(){
@@ -148,6 +150,7 @@ public class LocationListActivity extends AppCompatActivity {
     public void generateMoreResults(View view) {
 
         showLoadingScreen();
+        DataMain.currentlyLoadingExhibits = true;
 
         try {
 
@@ -157,9 +160,11 @@ public class LocationListActivity extends AppCompatActivity {
                     if (DataMain.foundExhibitsByAPIOnce) {
                         DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
                         triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        DataMain.currentlyLoadingExhibits = false;
                         displayExhibits(DataMain.getApiResultsStartIndex());
                     } else {
                         triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        DataMain.currentlyLoadingExhibits = false;
                         if (DataMain.foundExhibitsByAPIOnce) {
                             displayExhibits(DataMain.getApiResultsStartIndex());
                         }
@@ -189,6 +194,7 @@ public class LocationListActivity extends AppCompatActivity {
         endLoadingScreen();
     }
 
+    // Moves activity to back on back press, rather than closing it outright
     public void onBackPressed () {
         moveTaskToBack (true);
     }

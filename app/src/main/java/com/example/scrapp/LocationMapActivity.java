@@ -47,7 +47,6 @@ public class LocationMapActivity extends AppCompatActivity
     private LocationManager locationManager;
     private LocationListener locationListener;
     private boolean mapMoved = false;
-    String best;
     Marker userMarker;
 
     @Override
@@ -161,30 +160,6 @@ public class LocationMapActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (locationManager != null) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            }
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(locationListener);
-        }
-    }
-
-    public void onBackPressed () {
-        moveTaskToBack (true);
-    }
-
-
     // Actionbar Stuff
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -195,9 +170,11 @@ public class LocationMapActivity extends AppCompatActivity
 
     // List activity nav button
     public void onClickActionBar(MenuItem mi) {
+        if (!DataMain.currentlyLoadingExhibits) {
             Intent listIntent = new Intent(this, LocationListActivity.class);
             startActivity(listIntent);
             finish();
+        }
     }
 
     public static Bitmap getCurrentDisplayPhoto(){
@@ -208,6 +185,7 @@ public class LocationMapActivity extends AppCompatActivity
     public void generateMoreResults(View view) {
 
         showLoadingScreen();
+        DataMain.currentlyLoadingExhibits = true;
 
         try {
 
@@ -217,9 +195,11 @@ public class LocationMapActivity extends AppCompatActivity
                     if (DataMain.foundExhibitsByAPIOnce) {
                         DataMain.setApiResultsStartIndex(DataMain.getApiResultsStartIndex() + 10);
                         triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        DataMain.currentlyLoadingExhibits = false;
                         addMarker2Map(DataMain.getApiResultsStartIndex());
                     } else {
                         triggerEndLoadingScreen(DataMain.findExhibitsByApi(context));
+                        DataMain.currentlyLoadingExhibits = false;
                         if (DataMain.foundExhibitsByAPIOnce) {
                             addMarker2Map(DataMain.getApiResultsStartIndex());
                         }
@@ -247,6 +227,31 @@ public class LocationMapActivity extends AppCompatActivity
     // Triggered when DataMain.findExhibitsByApi finishes
     private void triggerEndLoadingScreen(boolean result) {
         endLoadingScreen();
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (locationManager != null) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+    }
+    // Moves activity to back on back press, rather than closing it outright
+    public void onBackPressed () {
+        moveTaskToBack (true);
     }
 
 }
