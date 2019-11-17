@@ -100,8 +100,8 @@ public class LocationMapActivity extends AppCompatActivity
 
             // Stuff to make onLocationChanged listener work + ask for location permissions
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1, locationListener);
                 addUserMarker(DataMain.userCoor);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
@@ -118,7 +118,7 @@ public class LocationMapActivity extends AppCompatActivity
 
         LatLng latlng = new LatLng(location.latitude, location.longitude);
 
-        userMarker = mMap.addMarker(new MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        userMarker = mMap.addMarker(new MarkerOptions().position(latlng).title("This is you!").icon(BitmapDescriptorFactory.fromResource(R.drawable.user_marker)));
         userMarker.setTag("User");
 
         if (!mapMoved) {
@@ -136,7 +136,7 @@ public class LocationMapActivity extends AppCompatActivity
                     exhibit.exhibitGeom.getLatitude());
 
             // Marker.setTag is used to specify which exhibit is associated with which marker
-            Marker marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.exhibit_marker)));
             marker.setTag(exhibit);
 
             // Sets the on-click listener for each marker
