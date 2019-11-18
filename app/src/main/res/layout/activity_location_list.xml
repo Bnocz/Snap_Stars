@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/lighterGrey"
     tools:context=".LocationListActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,6 +43,7 @@
                     android:paddingBottom="6dp"
                     android:text="More Results"
                     android:textAlignment="center"
+                    android:fontFamily="@font/domine"
                     android:textColor="@color/primary_green"
                     android:textSize="25dp"></TextView>
             </LinearLayout>
@@ -58,6 +60,7 @@
             android:textSize="25sp"
             android:textStyle="bold"
             android:visibility="invisible"
+            android:fontFamily="@font/domine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -41,7 +41,6 @@ public class LocationListActivity extends AppCompatActivity {
     //Creates a Layout and View for each title.
     private void displayExhibits(int startingIndex){
         for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
-
             Log.e("Check 222: ", "" + startingIndex);
             Log.e("Check 223: ", "" + DataMain.exhibits.size());
 
@@ -75,10 +74,8 @@ public class LocationListActivity extends AppCompatActivity {
             try {
                 ImageView thumbnail = new ImageView(this);
                 Bitmap bitmap = exhibit.getExhibitPhoto().getDisplayphoto();
-                thumbnail.setImageBitmap(bitmap);
-                thumbnail.setAdjustViewBounds(true);
-                thumbnail.setMaxHeight(250);
-                thumbnail.setMaxWidth(250);
+                Bitmap resized = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
+                thumbnail.setImageBitmap(resized);
                 groupingLayout.addView(thumbnail);
             } catch (Exception e) {
                 Log.e("DisplayImage", "Display image not found: " + e);
