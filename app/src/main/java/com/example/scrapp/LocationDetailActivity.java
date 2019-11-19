@@ -54,7 +54,6 @@ public class LocationDetailActivity extends AppCompatActivity {
     Bitmap displayPhoto;
     static final int REQUEST_TAKE_PHOTO = 1;
     private static final int CAMERA_REQUEST = 1888;
-    String currentPhotoPath;
     ImageView photo;
 
     @Override
@@ -134,8 +133,10 @@ public class LocationDetailActivity extends AppCompatActivity {
         c.drawBitmap(bmpOriginal, 0, 0, paint);
         return bmpGrayscale;
     }
+
     public void onCameraClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra("android.intent.extra.quickCapture",true);
         startActivityForResult(takePictureIntent, CAMERA_REQUEST);
     }
 
@@ -153,57 +154,17 @@ public class LocationDetailActivity extends AppCompatActivity {
             if (results.get(1).equals("true")) {
                 photo.setImageBitmap(returnedPhoto);
 
-
-//
-//                Log.e("Check 119: ", "" + exhibit.getExhibitPhoto().getDisplayphoto());
-//                Log.e("Check 118: ", "" + exhibit.exhibitPhoto.toString());
-
                 DataMain.getExhibitByIdToChangeDisplayPhoto(exhibit.getRegistryid(), returnedPhoto);
                 DataMain.getExhibitByIdToChangeExhibitFoundStatus(exhibit.getRegistryid(), true);
                 Log.e("Check 88: ", "" + exhibit.isExhibitFound());
-//                trueExhibit.setBitmap(returnedPhoto);
-//                Log.e("Check 115: ", "" + trueExhibit);
                 Log.e("Check 114: ", "" + results.get(0));
             }
-
-
-
-
-//                File photoFile = null;
-//                try {
-//                    photoFile = createImageFile();
-//                } catch (IOException ex) {
-//
-//                }
-//
-//                if (photoFile != null) {
-//                    Uri photoURI = FileProvider.getUriForFile(this,
-//                            "com.example.scrapp",
-//                            photoFile);
-//
-//                    Log.e("Check 112", "" + photoFile.toString());
-//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//                    Bitmap myBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-//                    setImageFromCamera(myBitmap);
-//                }
-//            }
-//
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            imageView.setImageBitmap(photo);
         }
     }
 
     private ArrayList<String> saveToInternalStorage(Bitmap bitmapImage){
         ArrayList results = new ArrayList();
 
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-
-        // path to /data/data/yourapp/app_data/snap_van (a directory)
-//        File directory = cw.getDir("files", Context.MODE_PRIVATE);
-//
-//        // Create snap_van
-//        File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
         String path = context.getFilesDir().getAbsolutePath() + "/" + exhibit.getRegistryid();
         File file = new File(path);
         Log.e("Check 113: ", "" + file.toString());
@@ -229,26 +190,6 @@ public class LocationDetailActivity extends AppCompatActivity {
         results.add(success);
         return results;
     }
-
-
-//    private File createImageFile() throws IOException {
-//        // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-//
-//        // Save a file: path for use with ACTION_VIEW intents
-//        currentPhotoPath = image.getAbsolutePath();
-//        return image;
-//    }
-//
-
-
 
     public void onBackClick(View v) {
 
