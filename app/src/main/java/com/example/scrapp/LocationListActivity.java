@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,9 @@ public class LocationListActivity extends AppCompatActivity {
 
     //Creates a Layout and View for each title.
     private void displayExhibits(int startingIndex){
+
+        int layoutCount = 0;
+
         for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
             // Outermost Layout
             LinearLayout displayLayout = findViewById(R.id.list_items);
@@ -47,6 +51,16 @@ public class LocationListActivity extends AppCompatActivity {
             // Grouping Layout
             LinearLayout groupingLayout = new LinearLayout(this);
             groupingLayout.setOrientation(LinearLayout.HORIZONTAL);
+            groupingLayout.setPadding(5, 5, 5, 5);
+
+            if(layoutCount % 2 == 0) {
+                groupingLayout.setBackgroundColor(Color.parseColor("#66E0E0E0"));
+            } else {
+                groupingLayout.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            }
+            layoutCount++;
+
+
             groupingLayout.setOnClickListener(new View.OnClickListener() {
 
                 @Override

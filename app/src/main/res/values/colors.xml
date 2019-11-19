@@ -18,6 +18,7 @@
     <color name="lighterGrey">#D1D1D1</color>
     <color name="darkGreyTransparant">#DD161616</color>
     <color name="fontColor">#8CC084</color>
-    <color name="OffWhite">#c9c9c9</color>
+    <color name="OffWhite">#FAFAFA</color>
+    <color name="ListItemBG">#4ac784</color>
 
 </resources>
