@@ -136,7 +136,6 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     public void onCameraClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra("android.intent.extra.quickCapture",true);
         startActivityForResult(takePictureIntent, CAMERA_REQUEST);
     }
 
