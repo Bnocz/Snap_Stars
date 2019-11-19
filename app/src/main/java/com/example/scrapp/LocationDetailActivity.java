@@ -47,6 +47,7 @@ import static android.icu.lang.UProperty.INT_START;
 
 public class LocationDetailActivity extends AppCompatActivity {
 
+    Context context = this;
     Intent i;
     String sourceActivity;
     Exhibit exhibit;
@@ -78,7 +79,6 @@ public class LocationDetailActivity extends AppCompatActivity {
         }
 
         // Applies greyscale to photo if photo from API
-        Log.e("Check 88: ", "" + exhibit.isExhibitFound());
         if (!DataMain.getExhibitByIdToGetExhibitFoundStatus(exhibit.getRegistryid())) {
             displayPhoto = this.toGrayscale(displayPhoto);
         }
@@ -135,7 +135,6 @@ public class LocationDetailActivity extends AppCompatActivity {
         return bmpGrayscale;
     }
     public void onCameraClick(View v) {
-        Log.e("Check 111: ", "Inside handler");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePictureIntent, CAMERA_REQUEST);
     }
@@ -201,18 +200,18 @@ public class LocationDetailActivity extends AppCompatActivity {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
 
         // path to /data/data/yourapp/app_data/snap_van (a directory)
-        File directory = cw.getDir("user_images", Context.MODE_PRIVATE);
-
-        // Create snap_van
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-        File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
-        Log.e("Check 113: ", "" + mypath.toString());
+//        File directory = cw.getDir("files", Context.MODE_PRIVATE);
+//
+//        // Create snap_van
+//        File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
+        String path = context.getFilesDir().getAbsolutePath() + "/" + exhibit.getRegistryid();
+        File file = new File(path);
+        Log.e("Check 113: ", "" + file.toString());
 
         String success = "false";
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(mypath);
+            fos = new FileOutputStream(file);
             // Use the compress method on the BitMap object to write image to the OutputStream
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
             success = "true";
@@ -226,7 +225,7 @@ public class LocationDetailActivity extends AppCompatActivity {
             }
         }
 
-        results.add(mypath.getPath());
+        results.add(file.getPath());
         results.add(success);
         return results;
     }

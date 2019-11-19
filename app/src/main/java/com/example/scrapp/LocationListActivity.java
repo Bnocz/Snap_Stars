@@ -41,10 +41,6 @@ public class LocationListActivity extends AppCompatActivity {
     //Creates a Layout and View for each title.
     private void displayExhibits(int startingIndex){
         for (final Exhibit exhibit : DataMain.exhibits.subList(startingIndex, DataMain.exhibits.size())) {
-            Log.e("Check 222: ", "" + startingIndex);
-            Log.e("Check 223: ", "" + DataMain.exhibits.size());
-
-
             // Outermost Layout
             LinearLayout displayLayout = findViewById(R.id.list_items);
 
@@ -100,6 +96,8 @@ public class LocationListActivity extends AppCompatActivity {
             groupingLayout.addView(textViewLayout);
             displayLayout.addView(groupingLayout);
         }
+        Log.e("Check 222: ", "" + startingIndex);
+        Log.e("Check 223: ", "" + DataMain.exhibits.size());
     }
 
 

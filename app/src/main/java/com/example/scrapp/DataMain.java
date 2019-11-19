@@ -206,6 +206,8 @@ public class DataMain extends AppCompatActivity {
             ExhibitGeom newExhibitGeom = null;
             ExhibitPhoto newExhibitPhoto = null;
 
+            boolean exhibitFound = false;
+
 
             try{
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -219,20 +221,24 @@ public class DataMain extends AppCompatActivity {
 
 
                 try{
-
-
-
                     //File file = new File("/data/user/0/com.example.scrapp/app_imageDir/" + jsonObjectFields.get("registryid"));
                     String path = context.getFilesDir().getAbsolutePath() + "/" + jsonObjectFields.get("registryid");
                     File file = new File(path);
 
+//                    File directory = cw.getDir("files", Context.MODE_PRIVATE);
+//                    File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
+
+                    Log.e("Check 111: ", path);
+                    Log.e("Check 112: ", "" + file.exists());
+
                     if(file.exists()){
                         try {
-                            File f=new File(path, "profile.jpg");
+                            File f=new File(path, path + ".jpg");
                             Bitmap userBitmap = BitmapFactory.decodeStream(new FileInputStream(file));
 //                            ImageView img=(ImageView)findViewById(R.id.imgPicker);
 //                            img.setImageBitmap(b);
                             bmpimg = userBitmap;
+                            exhibitFound = true;
                         }
                         catch (FileNotFoundException e)
                         {
@@ -313,6 +319,11 @@ public class DataMain extends AppCompatActivity {
                     if (newExhibitGeom != null) {
                         newExhibit = new Exhibit(exhibitAttributes);
                     }
+
+                    if (exhibitFound) {
+                        newExhibit.setExhibitFound(true);
+                    }
+
                 } catch (Exception e) {
                     Log.e("Check", "Exhibit Creation Null Error " + e.getStackTrace()[0].getLineNumber());
                 }
@@ -374,14 +385,10 @@ public class DataMain extends AppCompatActivity {
 
 
     public static void getExhibitByIdToChangeExhibitFoundStatus(int id, boolean found) {
-        Log.e("Check 89: ", "" + id + " " + found);
         for (Exhibit exhibit : exhibits) {
-            Log.e("Check 90: ", "" + exhibit.getRegistryid());
 
             if (exhibit.getRegistryid() == id) {
-                Log.e("Check 91: ", "" + id + "    " + exhibit.getRegistryid());
                 exhibit.setExhibitFound(found);
-                Log.e("Check 92: ", "" + exhibit.isExhibitFound());
             }
         }
     }
