@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.lang.StringBuilder;
 public class Exhibit implements Parcelable {
+
+    public boolean exhibitFound;
     public Bitmap displayphoto;
     private String sitename;
     private String status;
@@ -27,6 +29,7 @@ public class Exhibit implements Parcelable {
 
     public Exhibit(HashMap exhibitAttributes) {
         super();
+        this.exhibitFound = false;
         this.displayphoto = (Bitmap) exhibitAttributes.get("displayphoto");
         this.sitename = exhibitAttributes.get("sitename").toString();
         this.status = exhibitAttributes.get("status").toString();
@@ -88,6 +91,10 @@ public class Exhibit implements Parcelable {
         }};
         return photoAttributes;
     }
+
+    public boolean isExhibitFound() {return this.exhibitFound;}
+
+    public void setExhibitFound(boolean found) {this.exhibitFound = found;}
 
     public void setBitmap(Bitmap bitmap) {this.exhibitPhoto.displayphoto = bitmap;}
 

@@ -62,6 +62,8 @@ public class LocationListActivity extends AppCompatActivity {
                     intent.putExtra("exhibitObject", exhibit);
                     intent.putExtra("sourceActivity", "LocationListActivity");
                     startActivity(intent);
+
+                    finish();
                 }
             });
 

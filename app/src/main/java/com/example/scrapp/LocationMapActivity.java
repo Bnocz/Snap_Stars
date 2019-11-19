@@ -135,6 +135,8 @@ public class LocationMapActivity extends AppCompatActivity
             LatLng exhibitLatLng = new LatLng(exhibit.exhibitGeom.getLongtitude(),
                     exhibit.exhibitGeom.getLatitude());
 
+            Log.e("Check 99: ", "" + exhibit.isExhibitFound());
+
             // Marker.setTag is used to specify which exhibit is associated with which marker
             Marker marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.exhibit_marker)));
             marker.setTag(exhibit);
@@ -146,6 +148,7 @@ public class LocationMapActivity extends AppCompatActivity
 
                     if (!marker.getTag().equals("User")) {
                         Exhibit _exhibit = (Exhibit) marker.getTag();
+                        Log.e("Check 100: ", "" + _exhibit.isExhibitFound());
                         currentDetailsDisplayPhoto = _exhibit.getExhibitPhoto().getDisplayphoto();
 
                         //Put exhibit object in intent
@@ -238,6 +241,7 @@ public class LocationMapActivity extends AppCompatActivity
             if (locationManager != null) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                addMarker2Map(DataMain.getApiResultsStartIndex());
             }
         }
     }
@@ -249,9 +253,13 @@ public class LocationMapActivity extends AppCompatActivity
             locationManager.removeUpdates(locationListener);
         }
     }
+
+
     // Moves activity to back on back press, rather than closing it outright
     public void onBackPressed () {
         moveTaskToBack (true);
     }
+
+
 
 }

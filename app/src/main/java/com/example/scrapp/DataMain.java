@@ -363,5 +363,39 @@ public class DataMain extends AppCompatActivity {
     }
 
 
+    public static boolean getExhibitByIdToGetExhibitFoundStatus(int id) {
+        for (Exhibit exhibit : exhibits) {
+            if (exhibit.getRegistryid() == id) {
+                return exhibit.isExhibitFound();
+            }
+        }
+        return false;
+    }
+
+
+    public static void getExhibitByIdToChangeExhibitFoundStatus(int id, boolean found) {
+        Log.e("Check 89: ", "" + id + " " + found);
+        for (Exhibit exhibit : exhibits) {
+            Log.e("Check 90: ", "" + exhibit.getRegistryid());
+
+            if (exhibit.getRegistryid() == id) {
+                Log.e("Check 91: ", "" + id + "    " + exhibit.getRegistryid());
+                exhibit.setExhibitFound(found);
+                Log.e("Check 92: ", "" + exhibit.isExhibitFound());
+            }
+        }
+    }
+
+    public static Exhibit getExhibitById(int id) {
+        for (Exhibit exhibit : exhibits) {
+            if (exhibit.getRegistryid() == id) {
+                return exhibit;
+            }
+        }
+        return null;
+    }
+
+
+
 
 }

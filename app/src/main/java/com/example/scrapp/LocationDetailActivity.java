@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.DataInput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,6 +48,7 @@ import static android.icu.lang.UProperty.INT_START;
 public class LocationDetailActivity extends AppCompatActivity {
 
     Intent i;
+    String sourceActivity;
     Exhibit exhibit;
     Bitmap displayPhoto;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -64,19 +66,24 @@ public class LocationDetailActivity extends AppCompatActivity {
 
         i = getIntent();
         exhibit = (Exhibit) i.getParcelableExtra("exhibitObject");
-        String sourceActivity = i.getStringExtra("sourceActivity");
+        sourceActivity = i.getStringExtra("sourceActivity");
 
         // Sets up the display photo (grabbed from whichever activity brought us here).
          photo = findViewById(R.id.iv_photo);
 
-            if (sourceActivity.equals("LocationListActivity")) {
-                displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
-            } else if (sourceActivity.equals("LocationMapActivity")) {
-                displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
-            }
-            displayPhoto = this.toGrayscale(displayPhoto);
-            photo.setImageBitmap(displayPhoto);
+        if (sourceActivity.equals("LocationListActivity")) {
+            displayPhoto = LocationListActivity.getCurrentDisplayPhoto();
+        } else if (sourceActivity.equals("LocationMapActivity")) {
+            displayPhoto = LocationMapActivity.getCurrentDisplayPhoto();
+        }
 
+        // Applies greyscale to photo if photo from API
+        Log.e("Check 88: ", "" + exhibit.isExhibitFound());
+        if (!DataMain.getExhibitByIdToGetExhibitFoundStatus(exhibit.getRegistryid())) {
+            displayPhoto = this.toGrayscale(displayPhoto);
+        }
+
+        photo.setImageBitmap(displayPhoto);
         populateFields();
     }
 
@@ -153,6 +160,8 @@ public class LocationDetailActivity extends AppCompatActivity {
 //                Log.e("Check 118: ", "" + exhibit.exhibitPhoto.toString());
 
                 DataMain.getExhibitByIdToChangeDisplayPhoto(exhibit.getRegistryid(), returnedPhoto);
+                DataMain.getExhibitByIdToChangeExhibitFoundStatus(exhibit.getRegistryid(), true);
+                Log.e("Check 88: ", "" + exhibit.isExhibitFound());
 //                trueExhibit.setBitmap(returnedPhoto);
 //                Log.e("Check 115: ", "" + trueExhibit);
                 Log.e("Check 114: ", "" + results.get(0));
@@ -243,7 +252,14 @@ public class LocationDetailActivity extends AppCompatActivity {
 
 
     public void onBackClick(View v) {
-        finish();
+
+        if (sourceActivity.equals("LocationListActivity")) {
+            Intent listActivityIntent = new Intent(this, LocationListActivity.class);
+            startActivity(listActivityIntent);
+            finish();
+        } else if (sourceActivity.equals("LocationMapActivity")) {
+            finish();
+        }
     }
 
     // Actionbar Stuff
@@ -259,6 +275,13 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     public void onClickActionBar(MenuItem mi) {
+
+        if (sourceActivity.equals("LocationListActivity")) {
+            Intent listActivityIntent = new Intent(this, LocationListActivity.class);
+            startActivity(listActivityIntent);
             finish();
+        } else if (sourceActivity.equals("LocationMapActivity")) {
+            finish();
+        }
     }
 }
