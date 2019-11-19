@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.lang.StringBuilder;
 public class Exhibit implements Parcelable {
-
+    public Bitmap displayphoto;
     private String sitename;
     private String status;
     private String descriptionofwork;
-    private ExhibitPhoto exhibitPhoto;
+    public ExhibitPhoto exhibitPhoto;
     private String url;
     private Integer registryid;
     public ExhibitGeom exhibitGeom;
@@ -27,6 +27,7 @@ public class Exhibit implements Parcelable {
 
     public Exhibit(HashMap exhibitAttributes) {
         super();
+        this.displayphoto = (Bitmap) exhibitAttributes.get("displayphoto");
         this.sitename = exhibitAttributes.get("sitename").toString();
         this.status = exhibitAttributes.get("status").toString();
         this.descriptionofwork = exhibitAttributes.get("descriptionofwork").toString();

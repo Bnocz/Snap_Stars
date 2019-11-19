@@ -4,7 +4,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -32,17 +36,21 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static android.icu.lang.UProperty.INT_START;
 
 public class LocationDetailActivity extends AppCompatActivity {
 
+    Intent i;
     Exhibit exhibit;
     Bitmap displayPhoto;
     static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int CAMERA_REQUEST = 1888;
     String currentPhotoPath;
     ImageView photo;
 
@@ -54,7 +62,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
 
-        Intent i = getIntent();
+        i = getIntent();
         exhibit = (Exhibit) i.getParcelableExtra("exhibitObject");
         String sourceActivity = i.getStringExtra("sourceActivity");
 
@@ -122,43 +130,118 @@ public class LocationDetailActivity extends AppCompatActivity {
     public void onCameraClick(View v) {
         Log.e("Check 111: ", "Inside handler");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+    }
 
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            exhibit = (Exhibit) i.getParcelableExtra("exhibitObject");
 
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
+            Bitmap returnedPhoto = (Bitmap) data.getExtras().get("data");
 
+            ArrayList<String> results = saveToInternalStorage(returnedPhoto);
+
+            if (results.get(1).equals("true")) {
+                photo.setImageBitmap(returnedPhoto);
+
+
+//
+//                Log.e("Check 119: ", "" + exhibit.getExhibitPhoto().getDisplayphoto());
+//                Log.e("Check 118: ", "" + exhibit.exhibitPhoto.toString());
+
+                DataMain.getExhibitByIdToChangeDisplayPhoto(exhibit.getRegistryid(), returnedPhoto);
+//                trueExhibit.setBitmap(returnedPhoto);
+//                Log.e("Check 115: ", "" + trueExhibit);
+                Log.e("Check 114: ", "" + results.get(0));
             }
 
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.scrapp",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                Bitmap myBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                setImageFromCamera(myBitmap);
-            }
+
+
+
+//                File photoFile = null;
+//                try {
+//                    photoFile = createImageFile();
+//                } catch (IOException ex) {
+//
+//                }
+//
+//                if (photoFile != null) {
+//                    Uri photoURI = FileProvider.getUriForFile(this,
+//                            "com.example.scrapp",
+//                            photoFile);
+//
+//                    Log.e("Check 112", "" + photoFile.toString());
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+//                    setImageFromCamera(myBitmap);
+//                }
+//            }
+//
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            imageView.setImageBitmap(photo);
         }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+    private ArrayList<String> saveToInternalStorage(Bitmap bitmapImage){
+        ArrayList results = new ArrayList();
 
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+
+        // path to /data/data/yourapp/app_data/snap_van (a directory)
+        File directory = cw.getDir("user_images", Context.MODE_PRIVATE);
+
+        // Create snap_van
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+        File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
+        Log.e("Check 113: ", "" + mypath.toString());
+
+        String success = "false";
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            success = "true";
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        results.add(mypath.getPath());
+        results.add(success);
+        return results;
     }
+
+
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        currentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
+//
+
+
+
     public void onBackClick(View v) {
         finish();
     }

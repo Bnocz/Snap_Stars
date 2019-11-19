@@ -2,6 +2,7 @@ package com.example.scrapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,6 +28,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +39,7 @@ import java.util.List;
 
 public class DataMain extends AppCompatActivity {
 
-    private Context context = this;
+    public Context context = this;
 
     // User Location Variables
     static LatLng userCoor;
@@ -211,16 +215,37 @@ public class DataMain extends AppCompatActivity {
                 HashMap <String, Object> photoAttributes = ExhibitPhoto.getExhibitPhotoBaseAttributes();
 
                 JSONObject jsonObjectPhotoURL = null;
+                Bitmap bmpimg = null;
+
 
                 try{
-                    jsonObjectPhotoURL = jsonObjectFields.getJSONObject("photourl");
 
-                    ImageDownloadTask downloadTask = new ImageDownloadTask();
-                    Bitmap bmpimg = null;
 
-                    String apiImageResult = "https://covapp.vancouver.ca/PublicArtRegistry/ImageDisplay." + jsonObjectPhotoURL.get("format");
 
-                    bmpimg = downloadTask.execute(apiImageResult).get();
+                    //File file = new File("/data/user/0/com.example.scrapp/app_imageDir/" + jsonObjectFields.get("registryid"));
+                    String path = context.getFilesDir().getAbsolutePath() + "/" + jsonObjectFields.get("registryid");
+                    File file = new File(path);
+
+                    if(file.exists()){
+                        try {
+                            File f=new File(path, "profile.jpg");
+                            Bitmap userBitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+//                            ImageView img=(ImageView)findViewById(R.id.imgPicker);
+//                            img.setImageBitmap(b);
+                            bmpimg = userBitmap;
+                        }
+                        catch (FileNotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        jsonObjectPhotoURL = jsonObjectFields.getJSONObject("photourl");
+
+                        ImageDownloadTask downloadTask = new ImageDownloadTask();
+                        String apiImageResult = "https://covapp.vancouver.ca/PublicArtRegistry/ImageDisplay." + jsonObjectPhotoURL.get("format");
+
+                        bmpimg = downloadTask.execute(apiImageResult).get();
+                    }
                     photoAttributes.put("displayphoto", bmpimg);
 
                 } catch (Exception e) {
@@ -262,6 +287,9 @@ public class DataMain extends AppCompatActivity {
                 //Create an Exhibit Object from JSON
                 HashMap <String, Object> exhibitAttributes = Exhibit.getExhibitBaseAttributes();
 
+
+                try{exhibitAttributes.put("displayphoto", bmpimg);}catch (Exception e){};
+                try{exhibitAttributes.put("sitename", jsonObjectFields.get("sitename"));}catch (Exception e){};
                 try{exhibitAttributes.put("sitename", jsonObjectFields.get("sitename"));}catch (Exception e){};
                 try{exhibitAttributes.put("status", jsonObjectFields.get("status"));}catch (Exception e){};
                 try{exhibitAttributes.put("descriptionofwork", jsonObjectFields.get("descriptionofwork"));}catch (Exception e){};
@@ -302,6 +330,12 @@ public class DataMain extends AppCompatActivity {
 
     }
 
+
+    public boolean fileExist(String fname){
+        File file = getBaseContext().getFileStreamPath(fname);
+        return file.exists();
+    }
+
     public static double getUserLatitude(){
         return userCoor.latitude;
     }
@@ -317,4 +351,17 @@ public class DataMain extends AppCompatActivity {
     public static void setApiResultsStartIndex(int newStartIndex) { apiResultsStartIndex = newStartIndex; }
 
     public static int getApiResultsStartIndex() { return apiResultsStartIndex; }
+
+    public static void getExhibitByIdToChangeDisplayPhoto(int id, Bitmap photo) {
+        for (Exhibit exhibit : exhibits) {
+            if (exhibit.getRegistryid() == id) {
+                exhibit.setBitmap(photo);
+                return;
+            }
+        }
+        return;
+    }
+
+
+
 }

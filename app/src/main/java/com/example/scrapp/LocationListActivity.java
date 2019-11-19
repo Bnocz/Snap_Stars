@@ -74,7 +74,7 @@ public class LocationListActivity extends AppCompatActivity {
             try {
                 ImageView thumbnail = new ImageView(this);
                 Bitmap bitmap = exhibit.getExhibitPhoto().getDisplayphoto();
-                Bitmap resized = Bitmap.createScaledBitmap(bitmap, 200, 200, true);
+                Bitmap resized = Bitmap.createScaledBitmap(bitmap, 250, 200, true);
                 thumbnail.setImageBitmap(resized);
                 groupingLayout.addView(thumbnail);
             } catch (Exception e) {
