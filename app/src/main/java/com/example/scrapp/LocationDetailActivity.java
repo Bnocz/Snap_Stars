@@ -190,8 +190,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         return results;
     }
 
-    public void onBackClick(View v) {
-
+    public void onBackPressed() {
         if (sourceActivity.equals("LocationListActivity")) {
             Intent listActivityIntent = new Intent(this, LocationListActivity.class);
             startActivity(listActivityIntent);

@@ -20,7 +20,7 @@
 //        Intent loginIntent = new Intent(this, LoginActivity.class);
 //        startActivity(loginIntent);
 //    }
-//    public void onBackClick(View v) {
+//    public void onBackPressed(View v) {
 //        finish();
 //    }
 //}
