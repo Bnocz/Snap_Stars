@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -53,6 +54,7 @@ public class LocationListActivity extends AppCompatActivity {
             groupingLayout.setOrientation(LinearLayout.HORIZONTAL);
             groupingLayout.setPadding(5, 5, 5, 5);
 
+
             // Sets background color for items
             if (exhibit.isExhibitFound()) {
                 groupingLayout.setBackgroundColor(Color.parseColor("#aaf0d1"));
@@ -64,6 +66,8 @@ public class LocationListActivity extends AppCompatActivity {
                 }
                 layoutCount++;
             }
+
+
 
 
             groupingLayout.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +89,7 @@ public class LocationListActivity extends AppCompatActivity {
             // Grouping layout margin params
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(10, 10, 0, 10);
+
             groupingLayout.setLayoutParams(lp);
 
             // Get and display exhibit thumbnail
