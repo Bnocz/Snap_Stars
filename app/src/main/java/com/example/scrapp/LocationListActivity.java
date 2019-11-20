@@ -53,12 +53,17 @@ public class LocationListActivity extends AppCompatActivity {
             groupingLayout.setOrientation(LinearLayout.HORIZONTAL);
             groupingLayout.setPadding(5, 5, 5, 5);
 
-            if(layoutCount % 2 == 0) {
-                groupingLayout.setBackgroundColor(Color.parseColor("#66E0E0E0"));
+            // Sets background color for items
+            if (exhibit.isExhibitFound()) {
+                groupingLayout.setBackgroundColor(Color.parseColor("#aaf0d1"));
             } else {
-                groupingLayout.setBackgroundColor(Color.parseColor("#F5F5F5"));
+                if(layoutCount % 2 == 0) {
+                    groupingLayout.setBackgroundColor(Color.parseColor("#66E0E0E0"));
+                } else {
+                    groupingLayout.setBackgroundColor(Color.parseColor("#F5F5F5"));
+                }
+                layoutCount++;
             }
-            layoutCount++;
 
 
             groupingLayout.setOnClickListener(new View.OnClickListener() {
@@ -217,5 +222,6 @@ public class LocationListActivity extends AppCompatActivity {
     public void onBackPressed () {
         moveTaskToBack (true);
     }
+
 
 }

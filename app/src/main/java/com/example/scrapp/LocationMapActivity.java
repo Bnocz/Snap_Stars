@@ -4,29 +4,22 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Criteria;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -135,8 +128,15 @@ public class LocationMapActivity extends AppCompatActivity
             LatLng exhibitLatLng = new LatLng(exhibit.exhibitGeom.getLongtitude(),
                     exhibit.exhibitGeom.getLatitude());
 
+            // Sets Marker drawable based on whether or not it's been found
+            Marker marker = null;
+            if (exhibit.isExhibitFound()) {
+                marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.exhibit_marker_found)));
+            } else {
+                marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.exhibit_marker_not_found)));
+            }
+
             // Marker.setTag is used to specify which exhibit is associated with which marker
-            Marker marker = mMap.addMarker(new MarkerOptions().position(exhibitLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.exhibit_marker)));
             marker.setTag(exhibit);
 
             // Sets the on-click listener for each marker
@@ -246,6 +246,7 @@ public class LocationMapActivity extends AppCompatActivity
             if (locationManager != null) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                addMarker2Map(0);
             }
         }
     }
@@ -263,7 +264,6 @@ public class LocationMapActivity extends AppCompatActivity
     public void onBackPressed () {
         moveTaskToBack (true);
     }
-
 
 
 }
