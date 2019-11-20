@@ -216,12 +216,20 @@ public class LocationMapActivity extends AppCompatActivity
         View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
         loadingScreen.animate().alpha(1).setDuration(40);
         loadingScreen.setVisibility(View.VISIBLE);
+
+        View mapLoadingPanel = findViewById(R.id.mapLoadingPanel);
+        mapLoadingPanel.animate().alpha(1).setDuration(40);
+        mapLoadingPanel.setVisibility(View.VISIBLE);
     }
 
     private void endLoadingScreen() {
         View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
         loadingScreen.animate().alpha(0).setDuration(40);
         loadingScreen.setVisibility(View.INVISIBLE);
+
+        View mapLoadingPanel = findViewById(R.id.mapLoadingPanel);
+        mapLoadingPanel.animate().alpha(0).setDuration(40);
+        mapLoadingPanel.setVisibility(View.INVISIBLE);
     }
 
     // Triggered when DataMain.findExhibitsByApi finishes

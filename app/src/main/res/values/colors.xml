@@ -16,6 +16,7 @@
     <color name="primary_green">#1ABC9C</color>
     <color name="darkGrey">#161616</color>
     <color name="lighterGrey">#D1D1D1</color>
+    <color name="darkGreyMoreTransparant">#88161616</color>
     <color name="darkGreyTransparant">#DD161616</color>
     <color name="fontColor">#8CC084</color>
     <color name="OffWhite">#FAFAFA</color>

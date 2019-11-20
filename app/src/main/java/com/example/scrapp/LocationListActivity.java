@@ -192,12 +192,20 @@ public class LocationListActivity extends AppCompatActivity {
         View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
         loadingScreen.animate().alpha(1).setDuration(40);
         loadingScreen.setVisibility(View.VISIBLE);
+
+        View listLoadingPanel = findViewById(R.id.listLoadingPanel);
+        listLoadingPanel.animate().alpha(1).setDuration(40);
+        listLoadingPanel.setVisibility(View.VISIBLE);
     }
 
     private void endLoadingScreen() {
         View loadingScreen = findViewById(R.id.loadingMoreResultsScreen);
         loadingScreen.animate().alpha(0).setDuration(40);
         loadingScreen.setVisibility(View.INVISIBLE);
+
+        View listLoadingPanel = findViewById(R.id.listLoadingPanel);
+        listLoadingPanel.animate().alpha(0).setDuration(40);
+        listLoadingPanel.setVisibility(View.INVISIBLE);
     }
 
     // Triggered when DataMain.findExhibitsByApi finishes

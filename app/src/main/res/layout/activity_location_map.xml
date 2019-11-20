@@ -39,17 +39,33 @@
         android:id="@+id/loadingMoreResultsScreen"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/darkGreyTransparant"
+        android:background="@color/darkGreyMoreTransparant"
         android:gravity="center_horizontal|center"
-        android:text="LOADING"
         android:textColor="@color/primary_green"
         android:textSize="25sp"
         android:textStyle="bold"
         android:visibility="invisible"
+        android:fontFamily="@font/domine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/mapLoadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:gravity="center" >
+
+    <ProgressBar
+        android:id="@+id/mapLoadingIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="75dp"
+        android:minWidth="75dp"
+        android:indeterminate="true" />
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
