@@ -2,29 +2,18 @@ package com.example.scrapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.icu.text.SimpleDateFormat;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcel;
 import android.provider.MediaStore;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -33,17 +22,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.DataInput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
-import static android.icu.lang.UProperty.INT_START;
 import static com.example.scrapp.R.string.*;
 
 public class LocationDetailActivity extends AppCompatActivity {

@@ -2,7 +2,6 @@ package com.example.scrapp;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,18 +9,15 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.BitmapCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -305,7 +301,6 @@ public class DataMain extends AppCompatActivity {
                 try{exhibitAttributes.put("type", jsonObjectFields.get("type"));}catch (Exception e){};
                 try{exhibitAttributes.put("locationonsite", jsonObjectFields.get("locationonsite"));}catch (Exception e){};
 
-//                System.out.println("" + i);
                 System.out.println(exhibitAttributes.toString());
 
 
@@ -335,12 +330,6 @@ public class DataMain extends AppCompatActivity {
 
     }
 
-
-    public boolean fileExist(String fname){
-        File file = getBaseContext().getFileStreamPath(fname);
-        return file.exists();
-    }
-
     public static double getUserLatitude(){
         return userCoor.latitude;
     }
@@ -348,8 +337,6 @@ public class DataMain extends AppCompatActivity {
     public static double getUserLongtitude(){
         return userCoor.longitude;
     }
-
-    public static LatLng getUserLatLng() { return userCoor; }
 
     public static int getApiResultsCount() { return apiResultsCount; }
 
@@ -386,17 +373,5 @@ public class DataMain extends AppCompatActivity {
             }
         }
     }
-
-    public static Exhibit getExhibitById(int id) {
-        for (Exhibit exhibit : exhibits) {
-            if (exhibit.getRegistryid() == id) {
-                return exhibit;
-            }
-        }
-        return null;
-    }
-
-
-
 
 }

@@ -15,8 +15,6 @@ public class ConfirmPicActivity extends AppCompatActivity {
     }
 
     public void btnSendToDetail(View view) {
-
-
         Intent detailIntent = new Intent(this, LocationDetailActivity.class);
         startActivity(detailIntent);
     }
