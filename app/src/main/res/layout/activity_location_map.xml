@@ -27,7 +27,7 @@
         android:background="@color/darkGrey"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:text="More Results"
+        android:text="@string/more_results"
         android:textAlignment="center"
         android:textColor="@color/primary_green"
         android:textSize="25dp"

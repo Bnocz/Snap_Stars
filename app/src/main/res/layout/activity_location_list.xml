@@ -41,7 +41,7 @@
                     android:onClick="generateMoreResults"
                     android:paddingTop="6dp"
                     android:paddingBottom="6dp"
-                    android:text="More Results"
+                    android:text="@string/more_results"
                     android:textAlignment="center"
                     android:fontFamily="@font/domine"
                     android:textColor="@color/primary_green"

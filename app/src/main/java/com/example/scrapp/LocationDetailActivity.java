@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.icu.lang.UProperty.INT_START;
+import static com.example.scrapp.R.string.*;
 
 public class LocationDetailActivity extends AppCompatActivity {
 
@@ -62,7 +63,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location_detail);
 
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getString(R.string.app_name)); // for set actionbar_list_activity title
+        actionBar.setTitle(getString(app_name)); // for set actionbar_list_activity title
 
         i = getIntent();
         exhibit = (Exhibit) i.getParcelableExtra("exhibitObject");
@@ -89,23 +90,23 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     public void populateFields(){
         TextView type = findViewById(R.id.tv_type);
-        String typeText = "<b> Exhibit Type: </b>" + exhibit.getType();
+        String typeText = getString(exhibit_type) + exhibit.getType();
         type.setText(Html.fromHtml(typeText, 0));
 
         TextView area = findViewById(R.id.tv_area);
-        String areaText = "<b> Area: </b>" + exhibit.getGeoLocalArea();
+        String areaText = getString(R.string.area) + exhibit.getGeoLocalArea();
         area.setText(Html.fromHtml(areaText, 0));
 
         TextView address = findViewById(R.id.tv_address);
-        String addressText = "<b> Address: </b>" + exhibit.getSiteaddress();
+        String addressText = getString(R.string.address) + exhibit.getSiteaddress();
         address.setText(Html.fromHtml(addressText, 0));
 
         TextView locationOnSite = findViewById(R.id.tv_location_on_site);
-        String locationText = "<b> Location: </b>" + exhibit.getLocationonsite();
+        String locationText = getString(R.string.location) + exhibit.getLocationonsite();
         locationOnSite.setText(Html.fromHtml(locationText, 0));
 
         TextView details = findViewById(R.id.tv_details);
-        String detailsText = "<b> Details: </b>" + exhibit.getDescriptionofwork();
+        String detailsText = getString(R.string.details) + exhibit.getDescriptionofwork();
         details.setText(Html.fromHtml(detailsText, 0));
 
         TextView link = findViewById(R.id.tv_link);
