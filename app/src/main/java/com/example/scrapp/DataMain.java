@@ -221,12 +221,8 @@ public class DataMain extends AppCompatActivity {
 
 
                 try{
-                    //File file = new File("/data/user/0/com.example.scrapp/app_imageDir/" + jsonObjectFields.get("registryid"));
                     String path = context.getFilesDir().getAbsolutePath() + "/" + jsonObjectFields.get("registryid");
                     File file = new File(path);
-
-//                    File directory = cw.getDir("files", Context.MODE_PRIVATE);
-//                    File mypath=new File(directory, "" + exhibit.getRegistryid() + ".jpg");
 
                     Log.e("Check 111: ", path);
                     Log.e("Check 112: ", "" + file.exists());
@@ -235,8 +231,6 @@ public class DataMain extends AppCompatActivity {
                         try {
                             File f=new File(path, path + ".jpg");
                             Bitmap userBitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-//                            ImageView img=(ImageView)findViewById(R.id.imgPicker);
-//                            img.setImageBitmap(b);
                             bmpimg = userBitmap;
                             exhibitFound = true;
                         }

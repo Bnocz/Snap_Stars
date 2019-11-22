@@ -69,7 +69,6 @@ public class LocationListActivity extends AppCompatActivity {
 
 
 
-
             groupingLayout.setOnClickListener(new View.OnClickListener() {
 
                 @Override
