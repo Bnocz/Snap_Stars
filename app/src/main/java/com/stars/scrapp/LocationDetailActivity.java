@@ -148,7 +148,7 @@ public class LocationDetailActivity extends AppCompatActivity {
     private ArrayList<String> saveToInternalStorage(Bitmap bitmapImage){
         ArrayList results = new ArrayList();
 
-        String path = context.getFilesDir().getAbsolutePath() + "/" + exhibit.getRegistryid();
+        String path = context.getFilesDir().getAbsolutePath() + "/app_photos/" + exhibit.getRegistryid();
         File file = new File(path);
         Log.e("Check 113: ", "" + file.toString());
 

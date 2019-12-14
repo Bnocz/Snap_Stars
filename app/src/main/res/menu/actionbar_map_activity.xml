@@ -2,11 +2,18 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/scoreCount"
+        app:showAsAction="always"
+        android:title="0/100">
+    </item>
+
     <item
         android:id="@+id/goToList"
         android:icon="@drawable/list_marker"
         android:title="List"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:onClick="onClickActionBar">
     </item>
 </menu>

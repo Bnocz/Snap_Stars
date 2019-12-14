@@ -49,6 +49,7 @@ public class DataMain extends AppCompatActivity {
     static int apiResultsCount = 10;
     static int apiResultsStartIndex = 0;
     static boolean exhibitsCreated = false;
+    public static int totalExhibitsFoundCount = 0;
     public static boolean foundExhibitsByAPIOnce = false;
     public static boolean currentlyLoadingExhibits = false;
 
@@ -58,6 +59,7 @@ public class DataMain extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
         setupLocationServices();
+        totalExhibitsFoundCount = getTotalExhibitsFoundCount();
 
         // Waits for location services to find user before finding nearby exhibits.
         new Handler().postDelayed(new Runnable() {
@@ -217,7 +219,7 @@ public class DataMain extends AppCompatActivity {
 
 
                 try{
-                    String path = context.getFilesDir().getAbsolutePath() + "/" + jsonObjectFields.get("registryid");
+                    String path = context.getFilesDir().getAbsolutePath() + "/app_photos/" + jsonObjectFields.get("registryid");
                     File file = new File(path);
 
                     Log.e("Check 111: ", path);
@@ -328,6 +330,24 @@ public class DataMain extends AppCompatActivity {
         DataMain.exhibitsCreated = true;
         return exhibitsTemp;
 
+    }
+
+    public int getTotalExhibitsFoundCount() {
+        String path = context.getFilesDir().getAbsolutePath() + "/app_photos/";
+        File folderPath = new File(path);
+        if (!folderPath.exists()){
+            folderPath.mkdirs();
+        }
+
+        File childfile[] = folderPath.listFiles();
+//                .endsWith(".jpg");
+
+        for (File file2 : childfile) {
+            Log.e("check 666", file2.getName());
+        }
+        Log.e("check 77", "" + childfile.length);
+        Log.e("check 78", context.getFilesDir().getAbsolutePath() + "/app_photos/");
+        return childfile.length;
     }
 
     public static double getUserLatitude(){
