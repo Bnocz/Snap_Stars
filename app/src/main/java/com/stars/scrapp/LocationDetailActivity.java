@@ -139,6 +139,7 @@ public class LocationDetailActivity extends AppCompatActivity {
 
                 DataMain.getExhibitByIdToChangeDisplayPhoto(exhibit.getRegistryid(), returnedPhoto);
                 DataMain.getExhibitByIdToChangeExhibitFoundStatus(exhibit.getRegistryid(), true);
+                DataMain.totalExhibitsFoundCount++;
                 Log.e("Check 88: ", "" + exhibit.isExhibitFound());
                 Log.e("Check 114: ", "" + results.get(0));
             }

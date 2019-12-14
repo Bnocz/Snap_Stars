@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.w3c.dom.Text;
 
 public class LocationMapActivity extends AppCompatActivity
     implements OnMapReadyCallback {
@@ -40,6 +43,7 @@ public class LocationMapActivity extends AppCompatActivity
     private LocationListener locationListener;
     private boolean mapMoved = false;
     Marker userMarker;
+    public Menu actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +167,10 @@ public class LocationMapActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar_map_activity, menu);
+        actionBar = menu;
+        getMenuInflater().inflate(R.menu.actionbar_map_activity, actionBar);
+        MenuItem score = actionBar.findItem(R.id.scoreCount);
+        score.setTitle("" + DataMain.totalExhibitsFoundCount + "/100");
         return true;
     }
 
@@ -247,6 +254,10 @@ public class LocationMapActivity extends AppCompatActivity
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 addMarker2Map(0);
             }
+        }
+        if(actionBar != null) {
+            MenuItem score = actionBar.findItem(R.id.scoreCount);
+            score.setTitle("" + DataMain.totalExhibitsFoundCount + "/100");
         }
     }
 
