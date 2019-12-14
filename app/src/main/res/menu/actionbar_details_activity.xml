@@ -2,6 +2,13 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/detailsScoreCount"
+        app:showAsAction="always"
+        android:title="0/100">
+    </item>
+
     <item
         android:id="@+id/goBack"
         android:icon="@drawable/back_icon"

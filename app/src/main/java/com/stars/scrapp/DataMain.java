@@ -364,6 +364,15 @@ public class DataMain extends AppCompatActivity {
 
     public static int getApiResultsStartIndex() { return apiResultsStartIndex; }
 
+    public static Exhibit getExhibitById(int id) {
+        for (Exhibit exhibit : exhibits) {
+            if (exhibit.getRegistryid() == id) {
+                return exhibit;
+            }
+        }
+        return null;
+    }
+
     public static void getExhibitByIdToChangeDisplayPhoto(int id, Bitmap photo) {
         for (Exhibit exhibit : exhibits) {
             if (exhibit.getRegistryid() == id) {

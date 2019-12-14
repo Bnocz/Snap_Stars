@@ -39,6 +39,7 @@ public class LocationDetailActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
     private static final int CAMERA_REQUEST = 1888;
     ImageView photo;
+    public Menu actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +139,15 @@ public class LocationDetailActivity extends AppCompatActivity {
                 photo.setImageBitmap(returnedPhoto);
 
                 DataMain.getExhibitByIdToChangeDisplayPhoto(exhibit.getRegistryid(), returnedPhoto);
+
+                Log.e("Check 70", "" + exhibit.isExhibitFound());
+
+                Exhibit origExhibit = DataMain.getExhibitById(exhibit.getRegistryid());
+                if(!origExhibit.isExhibitFound()) {
+                    DataMain.totalExhibitsFoundCount++;
+                }
+
                 DataMain.getExhibitByIdToChangeExhibitFoundStatus(exhibit.getRegistryid(), true);
-                DataMain.totalExhibitsFoundCount++;
                 Log.e("Check 88: ", "" + exhibit.isExhibitFound());
                 Log.e("Check 114: ", "" + results.get(0));
             }
@@ -189,9 +197,23 @@ public class LocationDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        actionBar = menu;
         getMenuInflater().inflate(R.menu.actionbar_details_activity, menu);
+        MenuItem score = actionBar.findItem(R.id.detailsScoreCount);
+        score.setTitle("" + DataMain.totalExhibitsFoundCount + "/450");
         return true;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(actionBar != null) {
+            MenuItem score = actionBar.findItem(R.id.detailsScoreCount);
+            score.setTitle("" + DataMain.totalExhibitsFoundCount + "/450");
+        }
+    }
+
 
     public void setImageFromCamera(Bitmap photoBM) {
         photo.setImageBitmap(photoBM);

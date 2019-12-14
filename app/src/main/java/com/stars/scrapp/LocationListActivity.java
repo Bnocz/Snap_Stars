@@ -2,12 +2,16 @@ package com.stars.scrapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,6 +28,7 @@ public class LocationListActivity extends AppCompatActivity {
     private Context context = this;
     public static Bitmap currentDetailsDisplayPhoto;
     boolean taskComplete = false;
+    public Menu actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +153,10 @@ public class LocationListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        actionBar = menu;
         getMenuInflater().inflate(R.menu.actionbar_list_activity, menu);
+        MenuItem score = actionBar.findItem(R.id.listScoreCount);
+        score.setTitle("" + DataMain.totalExhibitsFoundCount + "/450");
         return true;
     }
 
@@ -160,6 +168,17 @@ public class LocationListActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(actionBar != null) {
+            MenuItem score = actionBar.findItem(R.id.listScoreCount);
+            score.setTitle("" + DataMain.totalExhibitsFoundCount + "/450");
+        }
+    }
+
 
     public static Bitmap getCurrentDisplayPhoto(){
         return currentDetailsDisplayPhoto;
